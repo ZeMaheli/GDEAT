@@ -2,7 +2,7 @@ create table users(
     id                  serial primary key,
     username            VARCHAR(64) unique  not null,
     password_hash       VARCHAR(256)        not null,
-    email               VARCHAR(320) unique not null
+    email               VARCHAR(128) unique not null
 );
 
 create table refresh_tokens
