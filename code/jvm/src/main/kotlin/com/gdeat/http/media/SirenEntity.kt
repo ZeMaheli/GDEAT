@@ -23,11 +23,6 @@ data class SirenEntity<T>(
     val title: String? = null
 ) {
     companion object {
-        private const val APPLICATION_TYPE = "application"
-        private const val SIREN_SUBTYPE = "vnd.siren+json"
-        const val SIREN_MEDIA_TYPE = "$APPLICATION_TYPE/$SIREN_SUBTYPE"
-
-        @Suppress("unused")
-        val sirenMediaType = MediaType(APPLICATION_TYPE, SIREN_SUBTYPE)
+        val sirenMediaType = MediaType("application/vnd.siren+json")
     }
 }

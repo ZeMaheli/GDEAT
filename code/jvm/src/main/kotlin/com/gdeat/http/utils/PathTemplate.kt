@@ -1,5 +1,7 @@
 package com.gdeat.http.utils
 
+import java.net.URI
+
 object PathTemplate {
 
     const val ABOUT = "/about"
@@ -15,4 +17,11 @@ object PathTemplate {
     const val CREATE = "/graphs/create"
     const val EDIT = "/graphs/edit"
     const val DELETE = "/graphs/delete"
+
+    // URI's
+    fun home() = URI(HOME)
+
+    fun usersLogin(): URI = URI(LOGIN)
+    fun usersLogout(): URI = URI(LOGOUT)
+    fun usersRefreshToken(): URI = URI(REFRESH_TOKEN)
 }

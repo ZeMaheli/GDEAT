@@ -1,12 +1,12 @@
-package com.gdeat.service.users.dtos.token
+package com.gdeat.service.users.dtos.logout
 
 /**
- * A Token Input DTO.
+ * A logout Input DTO.
  *
  * @property accessToken the access token
  * @property refreshToken the refresh token
  */
-data class TokenInputDTO(
+data class LogoutInputDTO(
     val accessToken: String,
     val refreshToken: String
 )

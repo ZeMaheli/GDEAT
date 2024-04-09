@@ -7,7 +7,7 @@ import com.gdeat.service.users.dtos.login.LoginOutputDTO
 import com.gdeat.service.users.dtos.register.RegisterInputDTO
 import com.gdeat.service.users.dtos.register.RegisterOutputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenOutputDTO
-import com.gdeat.service.users.dtos.token.TokenInputDTO
+import com.gdeat.service.users.dtos.token.RefreshTokenInputDTO
 import org.springframework.stereotype.Service
 
 /**
@@ -26,11 +26,11 @@ class UsersServiceImpl(
         TODO("Not yet implemented")
     }
 
-    override fun logout(tokenInputDTO: TokenInputDTO) {
+    override fun logout(tokenInputDTO: RefreshTokenInputDTO) {
         TODO("Not yet implemented")
     }
 
-    override fun refreshToken(tokenInputDTO: TokenInputDTO): RefreshTokenOutputDTO {
+    override fun refreshToken(tokenInputDTO: RefreshTokenInputDTO): RefreshTokenOutputDTO {
         TODO("Not yet implemented")
     }
 }
