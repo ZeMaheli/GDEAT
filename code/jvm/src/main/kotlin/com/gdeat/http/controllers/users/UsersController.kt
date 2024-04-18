@@ -16,6 +16,7 @@ import com.gdeat.service.users.dtos.logout.LogoutInputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenInputDTO
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -38,7 +39,10 @@ class UserController(private val usersServices: UsersService) {
      * @return ResponseEntity with the appropriate status and/or the created user tokens.
      */
     @PostMapping(PathTemplate.REGISTER)
-    fun register(@RequestBody userData: RegisterInputModel, response: HttpServletResponse): ResponseEntity<SirenEntity<RegisterOutputModel>> {
+    fun register(
+        @RequestBody userData: RegisterInputModel,
+        response: HttpServletResponse
+    ): ResponseEntity<SirenEntity<RegisterOutputModel>> {
         val userRegistryDTO = usersServices.register(userData.toRegisterInputDTO())
 
         setTokenCookies(response, userRegistryDTO.accessToken, userRegistryDTO.refreshToken)
@@ -62,7 +66,10 @@ class UserController(private val usersServices: UsersService) {
      * @return ResponseEntity with the appropriate status and/or the new user tokens.
      */
     @PostMapping(PathTemplate.LOGIN)
-    fun login(@RequestBody userData: LoginInputModel, response: HttpServletResponse): ResponseEntity<SirenEntity<LoginOutputModel>> {
+    fun login(
+        @RequestBody userData: LoginInputModel,
+        response: HttpServletResponse
+    ): ResponseEntity<SirenEntity<LoginOutputModel>> {
         val userLogInDTO = usersServices.login(userData.toLoginInputDTO())
 
         setTokenCookies(response, userLogInDTO.accessToken, userLogInDTO.refreshToken)
@@ -92,7 +99,7 @@ class UserController(private val usersServices: UsersService) {
         @RequestAttribute("refresh_token", required = true) refreshToken: String,
         response: HttpServletResponse
     ): ResponseEntity<SirenEntity<Unit>> {
-        usersServices.logout(LogoutInputDTO(accessToken,refreshToken))
+        usersServices.logout(LogoutInputDTO(accessToken, refreshToken))
 
         clearTokenCookies(response)
 
@@ -104,7 +111,7 @@ class UserController(private val usersServices: UsersService) {
             ),
         )
 
-        return ResponseEntity.status(200).contentType(sirenMediaType).body(logoutOutputEntity)
+        return ResponseEntity.status(HttpStatus.OK).contentType(sirenMediaType).body(logoutOutputEntity)
     }
 
     /**
@@ -118,7 +125,7 @@ class UserController(private val usersServices: UsersService) {
     fun refreshToken(
         @RequestAttribute("refresh_token", required = true) refreshToken: String,
         response: HttpServletResponse
-    ): ResponseEntity<*> {
+    ): ResponseEntity<SirenEntity<RefreshTokenOutputModel>> {
         val refreshTokenDTO = usersServices.refreshToken(RefreshTokenInputDTO(refreshToken))
 
         setTokenCookies(response, refreshTokenDTO.accessToken, refreshTokenDTO.refreshToken)
@@ -131,7 +138,7 @@ class UserController(private val usersServices: UsersService) {
             ),
         )
 
-        return ResponseEntity.status(200).contentType(sirenMediaType).body(refreshTokenEntity)
+        return ResponseEntity.status(HttpStatus.OK).contentType(sirenMediaType).body(refreshTokenEntity)
     }
 
     /**

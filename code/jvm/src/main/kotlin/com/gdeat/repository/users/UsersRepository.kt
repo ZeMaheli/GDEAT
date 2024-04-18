@@ -22,4 +22,12 @@ interface UsersRepository : JpaRepository<User, Long> {
      * @return true if a user with the given username exists, false otherwise
      */
     fun existsByUsername(username: String): Boolean
+
+    /**
+     * Checks if a user with the given email exists.
+     *
+     * @param email the username of the user to check
+     * @return true if a user with the given email exists, false otherwise
+     */
+    fun existsByEmail(email: String): Boolean
 }
