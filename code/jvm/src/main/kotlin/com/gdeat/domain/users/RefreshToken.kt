@@ -2,6 +2,7 @@ package com.gdeat.domain.users
 
 import jakarta.persistence.*
 import java.sql.Timestamp
+import com.gdeat.domain.exceptions.InvalidTokenException
 
 @Entity
 @Table(name = "refresh_tokens")
@@ -27,7 +28,7 @@ class RefreshToken {
         expirationDate: Timestamp
     ) {
         if (tokenHash.length != TOKEN_HASH_LENGTH)
-            TODO("Criar exceções para quando há erro na criação")
+            throw InvalidTokenException("Invalid token hash. Must have a length of $TOKEN_HASH_LENGTH")
 
         this.user = user
         this.tokenHash = tokenHash

@@ -1,5 +1,6 @@
 package com.gdeat.domain.users
 
+import com.gdeat.domain.exceptions.InvalidUserException
 import jakarta.persistence.*
 
 @Entity
@@ -16,7 +17,7 @@ class User{
     @Column(name = "password_hash", nullable = false, length = PASSWORD_HASH_LENGTH)
     val passwordHash: String
 
-    @Column(name = "email", nullable = false, unique = true, length = 320)
+    @Column(name = "email", nullable = false, unique = true, length = 256)
     val email: String
 
     constructor(
@@ -26,10 +27,10 @@ class User{
     ){
 
         if(username.length < MIN_USERNAME_LENGTH || username.length > MAX_USERNAME_LENGTH)
-            TODO("Criar exceções para quando há erro na criação")
+            throw InvalidUserException("Invalid username length. Please provide username length between $MIN_USERNAME_LENGTH..$MAX_USERNAME_LENGTH.")
 
         if (passwordHash.length != PASSWORD_HASH_LENGTH)
-            TODO("Criar exceções para quando há erro na criação")
+            throw InvalidUserException("Invalid password hash. Must have a length of $PASSWORD_HASH_LENGTH")
 
         this.username = username
         this.passwordHash = passwordHash

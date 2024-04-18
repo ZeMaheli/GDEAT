@@ -1,8 +1,10 @@
 package com.gdeat.service.users
 
+import com.gdeat.domain.users.RefreshToken
 import com.gdeat.domain.users.User
 import com.gdeat.repository.users.RefreshTokensRepository
 import com.gdeat.repository.users.UsersRepository
+import com.gdeat.service.exceptions.*
 import com.gdeat.service.users.dtos.login.LoginInputDTO
 import com.gdeat.service.users.dtos.login.LoginOutputDTO
 import com.gdeat.service.users.dtos.logout.LogoutInputDTO
@@ -11,8 +13,11 @@ import com.gdeat.service.users.dtos.register.RegisterOutputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenInputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenOutputDTO
 import com.gdeat.service.utils.SecurityConfig
+import com.gdeat.utils.JwtProvider
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import java.sql.Timestamp
+import java.time.Instant
 
 /**
  * Service class providing user-related functionality.
@@ -22,24 +27,33 @@ class UsersServiceImpl(
     private val usersRepository: UsersRepository,
     private val refreshTokensRepository: RefreshTokensRepository,
     private val securityConfig: SecurityConfig,
+    private val jwtProvider: JwtProvider,
 ) : UsersService {
+
     override fun register(registerInputDTO: RegisterInputDTO): RegisterOutputDTO {
         val username = registerInputDTO.username
         val password = registerInputDTO.password
         val email = registerInputDTO.email
 
         if (usersRepository.existsByUsername(username)) {
-
+            throw AlreadyExistsException("User with $username username already exists")
         }
 
         if (usersRepository.existsByEmail(email)) {
-
+            throw AlreadyExistsException("User with $email email already exists")
         }
+
         if (password.length < 12) {
-
+            throw InvalidPasswordException("Invalid password length. Must be at least 12 characters long")
         }
 
-        val user = usersRepository.save(User(username = username, passwordHash = securityConfig.hashPassword(username,password), email = email))
+        val user = usersRepository.save(
+            User(
+                username = username,
+                passwordHash = securityConfig.hashPassword(username, password),
+                email = email
+            )
+        )
 
         val (accessToken, refreshToken) = createTokens(user = user)
 
@@ -51,15 +65,65 @@ class UsersServiceImpl(
     }
 
     override fun login(loginInputDTO: LoginInputDTO): LoginOutputDTO {
-        TODO("Not yet implemented")
+        val username = loginInputDTO.username
+        val password = loginInputDTO.password
+
+        val user = usersRepository
+            .findByUsername(username = username)
+            ?: throw InvalidLoginException("Invalid username or password")
+
+        if (
+            !securityConfig.verifyHashPassword(
+                username = username,
+                rawPassword = password,
+                encodedPassword = user.passwordHash
+            )
+        ) throw InvalidLoginException("Invalid username or password")
+
+        val (accessToken, refreshToken) = createTokens(user = user)
+
+        return LoginOutputDTO(
+            accessToken = accessToken,
+            refreshToken = refreshToken
+        )
     }
 
     override fun logout(tokenInputDTO: LogoutInputDTO) {
-        TODO("Not yet implemented")
+        val user = getUserAndRevokeAccessToken(accessToken = tokenInputDTO.accessToken)
+
+        val refreshTokenEntity = refreshTokensRepository
+            .findByUserAndTokenHash(
+                user = user,
+                tokenHash = securityConfig.hashToken(token = tokenInputDTO.refreshToken)
+            )
+            ?: throw NotFoundException("Refresh token not found")
+
+        refreshTokensRepository.delete(refreshTokenEntity)
     }
 
     override fun refreshToken(tokenInputDTO: RefreshTokenInputDTO): RefreshTokenOutputDTO {
-        TODO("Not yet implemented")
+        val user = getUserAndRevokeAccessToken(accessToken = tokenInputDTO.accessToken)
+
+        val refreshTokenHash = securityConfig.hashToken(token = tokenInputDTO.refreshToken)
+
+        val refreshTokenEntity = refreshTokensRepository
+            .findByUserAndTokenHash(
+                user = user,
+                tokenHash = refreshTokenHash
+            )
+            ?: throw NotFoundException("Refresh token not found")
+
+        refreshTokensRepository.delete(refreshTokenEntity)
+
+        if (refreshTokenEntity.expirationDate.before(Timestamp.from(Instant.now())))
+            throw RefreshTokenExpiredException("Refresh token expired")
+
+        val (accessToken, newRefreshToken) = createTokens(user = user)
+
+        return RefreshTokenOutputDTO(
+            accessToken = accessToken,
+            refreshToken = newRefreshToken
+        )
     }
 
     /**
@@ -98,5 +162,25 @@ class UsersServiceImpl(
             accessToken = accessToken,
             refreshToken = refreshToken
         )
+    }
+
+    /**
+     * Gets the user from the access token and revokes it.
+     */
+    private fun getUserAndRevokeAccessToken(accessToken: String): User {
+        val accessTokenPayload = jwtProvider.getAccessTokenPayloadOrNull(token = accessToken)
+            ?: throw AuthenticationException("Invalid access token")
+
+        val user = usersRepository.findByUsername(username = accessTokenPayload.username)
+            ?: throw NotFoundException("User not found")
+
+        val revokedAccessTokenEntity = RevokedAccessToken(
+            tokenHash = hashingUtils.hashToken(token = accessToken),
+            user = user,
+            expirationDate = Timestamp.from(accessTokenPayload.claims.expiration.toInstant())
+        )
+
+        revokedAccessTokensRepository.save(revokedAccessTokenEntity)
+        return user
     }
 }
