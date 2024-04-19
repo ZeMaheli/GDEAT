@@ -1,0 +1,27 @@
+.about-container {
+    font-family: 'Arial', sans-serif;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .about-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .author-info {
+    margin-top: 5px;
+  }
+  
+  .repository-info {
+    margin-top: 5px;
+  }
+  
+  .property-value {
+    font-weight: bold;
+  }
+  
