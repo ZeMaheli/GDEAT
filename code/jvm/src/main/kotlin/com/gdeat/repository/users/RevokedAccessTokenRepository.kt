@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 /**
  * Repository for the [RevokedAccessToken] entity.
  */
-interface RevokedAccessTokensRepository : JpaRepository<RevokedAccessToken, Long> {
+interface RevokedAccessTokenRepository : JpaRepository<RevokedAccessToken, Long> {
 }

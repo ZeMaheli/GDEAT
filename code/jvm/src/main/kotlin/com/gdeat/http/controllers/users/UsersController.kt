@@ -5,10 +5,10 @@ import com.gdeat.http.controllers.users.models.login.LoginOutputModel
 import com.gdeat.http.controllers.users.models.refreshToken.RefreshTokenOutputModel
 import com.gdeat.http.controllers.users.models.register.RegisterInputModel
 import com.gdeat.http.controllers.users.models.register.RegisterOutputModel
-import com.gdeat.http.media.Link
-import com.gdeat.http.media.SirenEntity
-import com.gdeat.http.media.SirenEntity.Companion.sirenMediaType
-import com.gdeat.http.pipeline.authentication.RequiresAuthorization
+import com.gdeat.http.media.siren.Link
+import com.gdeat.http.media.siren.SirenEntity
+import com.gdeat.http.media.siren.SirenEntity.Companion.sirenMediaType
+import com.gdeat.http.pipeline.authentication.RequiresAuthentication
 import com.gdeat.http.utils.PathTemplate
 import com.gdeat.http.utils.Rels
 import com.gdeat.service.users.UsersService
@@ -56,7 +56,7 @@ class UserController(private val usersServices: UsersService) {
             ),
         )
 
-        return ResponseEntity.status(HttpStatus.CREATED).contentType(sirenMediaType).body(registerOutputEntity)
+        return registerOutputEntity.toResponse(HttpStatus.CREATED)
     }
 
     /**
@@ -83,7 +83,7 @@ class UserController(private val usersServices: UsersService) {
             ),
         )
 
-        return ResponseEntity.status(HttpStatus.OK).contentType(sirenMediaType).body(loginOutputEntity)
+        return loginOutputEntity.toResponse(HttpStatus.OK)
     }
 
     /**
@@ -94,7 +94,7 @@ class UserController(private val usersServices: UsersService) {
      * @return ResponseEntity with the appropriate status and response body.
      */
     @PostMapping(PathTemplate.LOGOUT)
-    @RequiresAuthorization
+    @RequiresAuthentication
     fun logout(
         @RequestAttribute("access_token", required = true) accessToken: String,
         @RequestAttribute("refresh_token", required = true) refreshToken: String,
@@ -112,7 +112,7 @@ class UserController(private val usersServices: UsersService) {
             ),
         )
 
-        return ResponseEntity.status(HttpStatus.OK).contentType(sirenMediaType).body(logoutOutputEntity)
+        return logoutOutputEntity.toResponse(HttpStatus.OK)
     }
 
     /**
@@ -140,7 +140,7 @@ class UserController(private val usersServices: UsersService) {
             ),
         )
 
-        return ResponseEntity.status(HttpStatus.OK).contentType(sirenMediaType).body(refreshTokenEntity)
+        return refreshTokenEntity.toResponse(HttpStatus.OK)
     }
 
     /**

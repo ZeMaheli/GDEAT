@@ -1,6 +1,8 @@
-package com.gdeat.http.media
+package com.gdeat.http.media.siren
 
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 
 /**
  * Siren is a specification for representing hypermedia entities in JSON.
@@ -22,6 +24,10 @@ data class SirenEntity<T>(
     val links: List<Link>? = null,
     val title: String? = null
 ) {
+
+    fun toResponse(status: HttpStatus): ResponseEntity<SirenEntity<T>> =
+        ResponseEntity.status(status).contentType(sirenMediaType).body(this)
+
     companion object {
         val sirenMediaType = MediaType("application/vnd.siren+json")
     }

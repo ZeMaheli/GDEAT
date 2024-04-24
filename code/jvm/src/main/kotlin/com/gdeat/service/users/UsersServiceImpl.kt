@@ -4,7 +4,7 @@ import com.gdeat.domain.users.RefreshToken
 import com.gdeat.domain.users.RevokedAccessToken
 import com.gdeat.domain.users.User
 import com.gdeat.repository.users.RefreshTokensRepository
-import com.gdeat.repository.users.RevokedAccessTokensRepository
+import com.gdeat.repository.users.RevokedAccessTokenRepository
 import com.gdeat.repository.users.UsersRepository
 import com.gdeat.service.exceptions.*
 import com.gdeat.service.users.dtos.login.LoginInputDTO
@@ -30,7 +30,7 @@ import java.time.Instant
 class UsersServiceImpl(
     private val usersRepository: UsersRepository,
     private val refreshTokensRepository: RefreshTokensRepository,
-    private val revokedAccessTokensRepository: RevokedAccessTokensRepository,
+    private val revokedAccessTokensRepository: RevokedAccessTokenRepository,
     private val securityConfig: SecurityConfig,
     private val jwtProvider: JwtProvider,
     private val serverConfig: ServerConfiguration,

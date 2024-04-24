@@ -29,7 +29,7 @@ class AuthenticationInterceptor(
         handler: Any
     ): Boolean {
         if (
-            handler !is HandlerMethod || !handler.hasMethodAnnotation(RequiresAuthorization::class.java)
+            handler !is HandlerMethod || !handler.hasMethodAnnotation(RequiresAuthentication::class.java)
         ) return true
 
         val accessTokenAuthCookie = request.cookies?.firstOrNull { it.name == ACCESS_TOKEN_COOKIE_NAME }?.value

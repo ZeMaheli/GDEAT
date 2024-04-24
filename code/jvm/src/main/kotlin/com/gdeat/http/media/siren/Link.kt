@@ -1,4 +1,4 @@
-package com.gdeat.http.media
+package com.gdeat.http.media.siren
 
 import org.springframework.http.MediaType
 import java.net.URI
