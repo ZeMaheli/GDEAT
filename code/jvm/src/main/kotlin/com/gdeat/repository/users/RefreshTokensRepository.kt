@@ -17,4 +17,19 @@ interface RefreshTokensRepository : JpaRepository<RefreshToken, Long> {
      * @return the [RefreshToken] if found, null otherwise
      */
     fun findByUserAndTokenHash(user: User, tokenHash: String): RefreshToken?
+
+    /**
+     * Counts the number of refresh tokens for a given user.
+     *
+     * @param user the user
+     * @return the number of refresh tokens for the user
+     */
+    fun countByUser(user: User): Int
+
+    /**
+     * Gets a list of all refresh tokens of a certain user
+     * @param user the user
+     * @return list with all refresh tokens of the user
+     */
+    fun getRefreshTokensOfUser(user: User):List<RefreshToken>
 }

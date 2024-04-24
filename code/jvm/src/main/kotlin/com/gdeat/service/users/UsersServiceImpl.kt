@@ -1,8 +1,10 @@
 package com.gdeat.service.users
 
 import com.gdeat.domain.users.RefreshToken
+import com.gdeat.domain.users.RevokedAccessToken
 import com.gdeat.domain.users.User
 import com.gdeat.repository.users.RefreshTokensRepository
+import com.gdeat.repository.users.RevokedAccessTokensRepository
 import com.gdeat.repository.users.UsersRepository
 import com.gdeat.service.exceptions.*
 import com.gdeat.service.users.dtos.login.LoginInputDTO
@@ -14,8 +16,9 @@ import com.gdeat.service.users.dtos.token.RefreshTokenInputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenOutputDTO
 import com.gdeat.service.utils.SecurityConfig
 import com.gdeat.utils.JwtProvider
-import org.springframework.data.domain.PageRequest
+import com.gdeat.utils.ServerConfiguration
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
 import java.time.Instant
 
@@ -23,11 +26,14 @@ import java.time.Instant
  * Service class providing user-related functionality.
  */
 @Service
+@Transactional(rollbackFor = [Exception::class])
 class UsersServiceImpl(
     private val usersRepository: UsersRepository,
     private val refreshTokensRepository: RefreshTokensRepository,
+    private val revokedAccessTokensRepository: RevokedAccessTokensRepository,
     private val securityConfig: SecurityConfig,
     private val jwtProvider: JwtProvider,
+    private val serverConfig: ServerConfiguration,
 ) : UsersService {
 
     override fun register(registerInputDTO: RegisterInputDTO): RegisterOutputDTO {
@@ -133,22 +139,17 @@ class UsersServiceImpl(
      * @return the access and refresh tokens
      */
     private fun createTokens(user: User): Tokens {
-        if (refreshTokensRepository.countByUser(user = user) >= config.maxRefreshTokens) {
+        if (refreshTokensRepository.countByUser(user = user) >= serverConfig.maxRefreshTokens) {
             refreshTokensRepository
-                .getRefreshTokensOfUserOrderedByExpirationDate(
-                    user = user,
-                    pageable = PageRequest.of(/* page = */ 0, /* size = */ 1)
-                )
-                .get()
-                .findFirst()
-                .ifPresent { refreshTokensRepository.delete(it) }
+                .getRefreshTokensOfUser(user).first()
+                .also { refreshTokensRepository.delete(it) }
         }
 
-        val jwtPayload = JwtPayload.fromData(username = user.username)
+        val jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
         val accessToken = jwtProvider.createAccessToken(jwtPayload = jwtPayload)
         val (refreshToken, expirationDate) = jwtProvider.createRefreshToken(jwtPayload = jwtPayload)
 
-        val refreshTokenHash = hashingUtils.hashToken(token = refreshToken)
+        val refreshTokenHash = securityConfig.hashToken(token = refreshToken)
 
         refreshTokensRepository.save(
             RefreshToken(
@@ -165,7 +166,7 @@ class UsersServiceImpl(
     }
 
     /**
-     * Gets the user from the access token and revokes it.
+     * Gets the user from the access token and revokes the token.
      */
     private fun getUserAndRevokeAccessToken(accessToken: String): User {
         val accessTokenPayload = jwtProvider.getAccessTokenPayloadOrNull(token = accessToken)
@@ -175,7 +176,7 @@ class UsersServiceImpl(
             ?: throw NotFoundException("User not found")
 
         val revokedAccessTokenEntity = RevokedAccessToken(
-            tokenHash = hashingUtils.hashToken(token = accessToken),
+            tokenHash = securityConfig.hashToken(token = accessToken),
             user = user,
             expirationDate = Timestamp.from(accessTokenPayload.claims.expiration.toInstant())
         )
@@ -183,4 +184,15 @@ class UsersServiceImpl(
         revokedAccessTokensRepository.save(revokedAccessTokenEntity)
         return user
     }
+
+    /**
+     * The tokens of a user.
+     *
+     * @property accessToken the access token
+     * @property refreshToken the refresh token
+     */
+    private data class Tokens(
+        val accessToken: String,
+        val refreshToken: String
+    )
 }

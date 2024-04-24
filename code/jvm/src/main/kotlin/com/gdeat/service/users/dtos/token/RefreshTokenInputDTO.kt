@@ -7,5 +7,6 @@ package com.gdeat.service.users.dtos.token
  * @property refreshToken the refresh token
  */
 data class RefreshTokenInputDTO(
-    val refreshToken: String
+    val refreshToken: String,
+    val accessToken: String
 )

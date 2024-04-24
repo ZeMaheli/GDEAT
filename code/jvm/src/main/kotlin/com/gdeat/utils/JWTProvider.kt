@@ -1,17 +1,13 @@
 package com.gdeat.utils
 
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.ExpiredJwtException
-import io.jsonwebtoken.JwtException
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.MalformedJwtException
+import io.jsonwebtoken.*
 import org.springframework.stereotype.Component
-import java.security.Key
 import java.security.SignatureException
 import java.sql.Timestamp
 import java.time.Duration
 import java.time.Instant
-import java.util.Date
+import java.util.*
+import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 
 /**
@@ -41,17 +37,15 @@ class JwtProvider(serverConfig: ServerConfiguration) {
      */
     data class JwtPayload(val claims: Claims) {
 
-        val username: String = claims[USERNAME_KEY] as String
+        val username: String = claims.subject as String
 
         companion object {
 
             fun fromData(username: String): JwtPayload {
                 val claims = Jwts.claims()
-                claims[USERNAME_KEY] = username
-                return JwtPayload(claims)
+                claims.subject(username)
+                return JwtPayload(claims.build())
             }
-
-            private const val USERNAME_KEY = "username"
         }
     }
 
@@ -77,9 +71,9 @@ class JwtProvider(serverConfig: ServerConfiguration) {
         val expirationDate = issuedAt.plus(accessTokenDuration)
 
         return Jwts.builder()
-            .setClaims(jwtPayload.claims)
-            .setIssuedAt(Date.from(issuedAt))
-            .setExpiration(Date.from(expirationDate))
+            .claims(jwtPayload.claims)
+            .issuedAt(Date.from(issuedAt))
+            .expiration(Date.from(expirationDate))
             .signWith(accessTokenKey)
             .compact()
     }
@@ -96,9 +90,9 @@ class JwtProvider(serverConfig: ServerConfiguration) {
 
         return RefreshTokenDetails(
             token = Jwts.builder()
-                .setClaims(jwtPayload.claims)
-                .setIssuedAt(Date.from(issuedAt))
-                .setExpiration(Date.from(expirationDate))
+                .claims(jwtPayload.claims)
+                .issuedAt(Date.from(issuedAt))
+                .expiration(Date.from(expirationDate))
                 .signWith(refreshTokenKey)
                 .compact(),
             expirationDate = Timestamp.from(expirationDate)
@@ -210,12 +204,12 @@ class JwtProvider(serverConfig: ServerConfiguration) {
      *
      * @return the claims of the token
      */
-    private fun getTokenClaims(token: String, tokenKey: Key) =
+    private fun getTokenClaims(token: String, tokenKey: SecretKey) =
         JwtPayload(
-            claims = Jwts.parserBuilder()
-                .setSigningKey(tokenKey)
+            claims = Jwts.parser()
+                .verifyWith(tokenKey)
                 .build()
-                .parseClaimsJws(token).body
+                .parseSignedClaims(token).payload
         )
 
     /**
