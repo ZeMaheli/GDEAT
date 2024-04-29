@@ -7,14 +7,13 @@ import com.gdeat.http.controllers.users.models.register.RegisterInputModel
 import com.gdeat.http.controllers.users.models.register.RegisterOutputModel
 import com.gdeat.http.media.siren.Link
 import com.gdeat.http.media.siren.SirenEntity
-import com.gdeat.http.media.siren.SirenEntity.Companion.sirenMediaType
 import com.gdeat.http.pipeline.authentication.RequiresAuthentication
 import com.gdeat.http.utils.PathTemplate
 import com.gdeat.http.utils.Rels
 import com.gdeat.service.users.UsersService
 import com.gdeat.service.users.dtos.logout.LogoutInputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenInputDTO
-import com.gdeat.utils.JwtProvider
+import com.gdeat.utils.JWTProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -124,8 +123,8 @@ class UserController(private val usersServices: UsersService) {
      */
     @PostMapping(PathTemplate.REFRESH_TOKEN)
     fun refreshToken(
-        @RequestAttribute(JwtProvider.ACCESS_TOKEN_ATTRIBUTE, required = true) refreshToken: String,
-        @RequestAttribute(JwtProvider.REFRESH_TOKEN_ATTRIBUTE, required = false) accessToken: String,
+        @RequestAttribute(JWTProvider.ACCESS_TOKEN_ATTRIBUTE, required = true) refreshToken: String,
+        @RequestAttribute(JWTProvider.REFRESH_TOKEN_ATTRIBUTE, required = false) accessToken: String,
         response: HttpServletResponse
     ): ResponseEntity<SirenEntity<RefreshTokenOutputModel>> {
         val refreshTokenDTO = usersServices.refreshToken(RefreshTokenInputDTO(refreshToken,accessToken))

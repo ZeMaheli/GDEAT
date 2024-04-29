@@ -15,7 +15,7 @@ import com.gdeat.service.users.dtos.register.RegisterOutputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenInputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenOutputDTO
 import com.gdeat.service.utils.SecurityConfig
-import com.gdeat.utils.JwtProvider
+import com.gdeat.utils.JWTProvider
 import com.gdeat.utils.ServerConfiguration
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -32,7 +32,7 @@ class UsersServiceImpl(
     private val refreshTokensRepository: RefreshTokensRepository,
     private val revokedAccessTokensRepository: RevokedAccessTokenRepository,
     private val securityConfig: SecurityConfig,
-    private val jwtProvider: JwtProvider,
+    private val jwtProvider: JWTProvider,
     private val serverConfig: ServerConfiguration,
 ) : UsersService {
 
@@ -145,7 +145,7 @@ class UsersServiceImpl(
                 .also { refreshTokensRepository.delete(it) }
         }
 
-        val jwtPayload = JwtProvider.JwtPayload.fromData(username = user.username)
+        val jwtPayload = JWTProvider.JwtPayload.fromData(username = user.username)
         val accessToken = jwtProvider.createAccessToken(jwtPayload = jwtPayload)
         val (refreshToken, expirationDate) = jwtProvider.createRefreshToken(jwtPayload = jwtPayload)
 

@@ -1,7 +1,7 @@
 package com.gdeat.http.pipeline.authentication
 
 import com.gdeat.service.exceptions.AuthenticationException
-import com.gdeat.utils.JwtProvider
+import com.gdeat.utils.JWTProvider
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Component
@@ -20,7 +20,7 @@ import org.springframework.web.servlet.HandlerInterceptor
  */
 @Component
 class AuthenticationInterceptor(
-    val jwtProvider: JwtProvider
+    val jwtProvider: JWTProvider
 ) : HandlerInterceptor {
 
     override fun preHandle(
@@ -43,10 +43,10 @@ class AuthenticationInterceptor(
                     ) ?: throw AuthenticationException("Token is not a Bearer Token")
                     )
 
-        request.setAttribute(JwtProvider.ACCESS_TOKEN_ATTRIBUTE, accessToken)
+        request.setAttribute(JWTProvider.ACCESS_TOKEN_ATTRIBUTE, accessToken)
 
         if (refreshToken != null)
-            request.setAttribute(JwtProvider.REFRESH_TOKEN_ATTRIBUTE, refreshToken)
+            request.setAttribute(JWTProvider.REFRESH_TOKEN_ATTRIBUTE, refreshToken)
 
         return true
     }

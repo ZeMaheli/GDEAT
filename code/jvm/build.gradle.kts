@@ -34,6 +34,8 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-api:0.12.3")
 	implementation("io.jsonwebtoken:jjwt-impl:0.12.5")
 	implementation("io.jsonwebtoken:jjwt-jackson:0.12.5")
+
+	implementation ("guru.nidi:graphviz-java:0.18.1")
 }
 
 tasks.withType<KotlinCompile> {

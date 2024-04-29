@@ -3,6 +3,7 @@ package com.gdeat.repository.users
 import com.gdeat.domain.users.RefreshToken
 import com.gdeat.domain.users.User
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
 
 /**
  * Repository for the [RefreshToken] entity
@@ -31,5 +32,6 @@ interface RefreshTokensRepository : JpaRepository<RefreshToken, Long> {
      * @param user the user
      * @return list with all refresh tokens of the user
      */
+    @Query("SELECT rt2 FROM RefreshToken rt2 WHERE rt2.user=:user ORDER BY rt2.expirationDate ASC")
     fun getRefreshTokensOfUser(user: User):List<RefreshToken>
 }

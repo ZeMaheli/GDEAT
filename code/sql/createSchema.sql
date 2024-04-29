@@ -8,7 +8,7 @@ create table users(
 create table refresh_tokens
 (
     id              SERIAL PRIMARY KEY,
-    token_hash VARCHAR(512) primary key,
+    token_hash VARCHAR(512) NOT NULL,
     user_id          int references users (id),
     expiration_date  TIMESTAMP NOT NULL,
 

@@ -18,7 +18,7 @@ import javax.crypto.spec.SecretKeySpec
  * @property refreshTokenKey the key used to sign refresh tokens
  */
 @Component
-class JwtProvider(serverConfig: ServerConfiguration) {
+class JWTProvider(serverConfig: ServerConfiguration) {
 
     private val accessTokenKey = SecretKeySpec(
         /* key = */ serverConfig.accessTokenSecret.toByteArray(),
@@ -147,26 +147,6 @@ class JwtProvider(serverConfig: ServerConfiguration) {
     fun getAccessTokenPayloadOrNull(token: String): JwtPayload? =
         try {
             getAccessTokenPayload(token)
-        } catch (e: ExpiredJwtException) {
-            e.claims?.let { JwtPayload(it) }
-        } catch (e: IllegalArgumentException) {
-            null
-        } catch (e: SignatureException) {
-            null
-        } catch (e: MalformedJwtException) {
-            null
-        }
-
-    /**
-     * Gets the payload of a JWT refresh token.
-     *
-     * @param token the token to get the payload from
-     *
-     * @return the payload of the token or null if an exception is thrown
-     */
-    fun getRefreshTokenPayloadOrNull(token: String): JwtPayload? =
-        try {
-            getRefreshTokenPayload(token)
         } catch (e: ExpiredJwtException) {
             e.claims?.let { JwtPayload(it) }
         } catch (e: IllegalArgumentException) {
