@@ -5,7 +5,7 @@ import java.net.URI
 object PathTemplate {
 
     const val ABOUT = "/about"
-    const val HOME = "/"
+    private const val HOME = "/"
 
     // USER
     const val REGISTER = "/users/register"
@@ -14,9 +14,10 @@ object PathTemplate {
     const val REFRESH_TOKEN = "/users/refresh-token"
 
     // GRAPH
-    const val CREATE = "/graphs/create"
-    const val EDIT = "/graphs/edit"
-    const val DELETE = "/graphs/delete"
+    const val CREATE_GRAPH = "/graphs/create"
+    const val GET_GRAPH = "/graphs/{id}"
+    const val EDIT_GRAPH = "/graphs/{id}/edit"
+    const val DELETE_GRAPH = "/graphs/{id}/delete"
 
     // URI's
     fun home() = URI(HOME)

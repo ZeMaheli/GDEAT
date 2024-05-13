@@ -28,8 +28,7 @@ import java.time.Duration
  * @property usersServices The service responsible for user-related business logic.
  */
 @RestController
-@RequestMapping()
-class UserController(private val usersServices: UsersService) {
+class UsersController(private val usersServices: UsersService) {
 
     /**
      * Handles user registration.

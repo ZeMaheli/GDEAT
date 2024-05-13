@@ -19,7 +19,7 @@ import org.springframework.web.servlet.HandlerInterceptor
  * @property jwtProvider the JWT provider
  */
 @Component
-class AuthenticationInterceptor(
+class AuthInterceptor(
     val jwtProvider: JWTProvider
 ) : HandlerInterceptor {
 
