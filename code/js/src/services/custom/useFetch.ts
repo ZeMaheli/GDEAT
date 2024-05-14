@@ -24,6 +24,12 @@ export function post(uri, body) {
     return fetchData(uri, 'POST', body)
 }
 
-export function get(uri){
+export function get(uri) {
     return fetchData(uri, 'GET', undefined)
+}
+export function deleteMethod(uri) {
+    return fetchData(uri, 'DELETE', undefined)
+}
+export function put(uri, body) {
+    return fetchData(uri, 'POST', body)
 }

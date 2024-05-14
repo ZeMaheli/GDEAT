@@ -1,7 +1,7 @@
-import {Link, Navigate} from "react-router-dom";
-import React, {useState} from "react";
-import {setSession} from "./Session";
-import {login} from "../services/usersServices";
+import { Link, Navigate } from "react-router-dom";
+import React, { useState } from "react";
+import { setSession } from "./Session";
+import { login } from "../services/usersServices";
 import {
     containerStyle,
     credentialsLinkStyle,
@@ -19,12 +19,12 @@ class Div extends React.Component {
 }
 
 export default function Login(): React.ReactElement {
-    const [inputs, setInputs] = useState({email: "", password: ""})
+    const [inputs, setInputs] = useState({ email: "", password: "" })
     const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState('')
     const [redirect, setRedirect] = useState(false)
 
-    if (redirect) return <Navigate to="/" replace={true}/>;
+    if (redirect) return <Navigate to="/" replace={true} />;
 
     function handleSubmit(ev: React.FormEvent<HTMLFormElement>) {
         ev.preventDefault()
@@ -49,11 +49,11 @@ export default function Login(): React.ReactElement {
 
     function handleChange(ev: React.FormEvent<HTMLInputElement>) {
         const name = ev.currentTarget.name;
-        setInputs({...inputs, [name]: ev.currentTarget.value});
+        setInputs({ ...inputs, [name]: ev.currentTarget.value });
     }
 
     return (
-        <><div/>
+        <><div />
             <div style={containerStyle}>
                 <Link className={"home-redirect"} to="/" style={homeLinkStyle}>Home</Link>
                 <form onSubmit={handleSubmit} style={formStyle}>
@@ -64,7 +64,7 @@ export default function Login(): React.ReactElement {
                                 id="email"
                                 name="email"
                                 onChange={handleChange}
-                                style={inputStyle}/>
+                                style={inputStyle} />
                         </div>
                         <div style={inputContainerStyle}>
                             <label htmlFor="password">Password</label>
@@ -74,7 +74,7 @@ export default function Login(): React.ReactElement {
                                 name="password"
                                 value={inputs.password}
                                 onChange={handleChange}
-                                style={inputStyle}/>
+                                style={inputStyle} />
                         </div>
                         <div>
                             <button type="submit" style={submitButtonStyle}>
@@ -82,7 +82,7 @@ export default function Login(): React.ReactElement {
                             </button>
                         </div>
                         <p style={credentialsLinkStyle}>
-                            Don't have an account? <Link id={"sign-up-redirect"} to="/gomoku/register">Sign Up</Link>
+                            Don't have an account? <Link id={"sign-up-redirect"} to="/users/register">Sign Up</Link>
                         </p>
                     </fieldset>
                 </form>

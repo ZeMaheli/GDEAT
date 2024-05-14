@@ -1,5 +1,5 @@
 import React from "react";
-import {Navigate} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 export function getSessionToken(): string | null {
     return localStorage.getItem('accessToken');
@@ -22,5 +22,5 @@ export function AuthRequired({ children }: { children: React.ReactElement }) {
     if (isLogged()) {
         return children;
     }
-    return <Navigate to="/gomoku/login" replace={true} />;
+    return <Navigate to="/users/login" replace={true} />;
 }

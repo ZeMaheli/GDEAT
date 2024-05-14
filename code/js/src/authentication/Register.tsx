@@ -1,7 +1,7 @@
-import {Link, Navigate} from "react-router-dom";
-import React, {useState} from "react";
-import {setSession} from "./Session";
-import {register} from "../services/usersServices";
+import { Link, Navigate } from "react-router-dom";
+import React, { useState } from "react";
+import { setSession } from "./Session";
+import { register } from "../services/usersServices";
 import {
     containerStyle,
     credentialsLinkStyle,
@@ -13,12 +13,12 @@ import {
 } from "./style/authenticationBoxStyle";
 
 export default function Register(): React.ReactElement {
-    const [inputs, setInputs] = useState({email: "", username: "", password: ""})
+    const [inputs, setInputs] = useState({ email: "", username: "", password: "" })
     const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState('')
     const [redirect, setRedirect] = useState(false)
 
-    if (redirect) return <Navigate to="/" replace={true}/>;
+    if (redirect) return <Navigate to="/" replace={true} />;
 
     function handleSubmit(ev: React.FormEvent<HTMLFormElement>) {
         ev.preventDefault()
@@ -44,7 +44,7 @@ export default function Register(): React.ReactElement {
 
     function handleChange(ev: React.FormEvent<HTMLInputElement>) {
         const name = ev.currentTarget.name;
-        setInputs({...inputs, [name]: ev.currentTarget.value})
+        setInputs({ ...inputs, [name]: ev.currentTarget.value })
     }
 
     return (
@@ -91,7 +91,7 @@ export default function Register(): React.ReactElement {
                         </button>
                     </div>
                     <p style={credentialsLinkStyle}>
-                        Already have an account? <Link id={"login-redirect"} to="/gomoku/login">Log In</Link>
+                        Already have an account? <Link id={"login-redirect"} to="/users/login">Log In</Link>
                     </p>
                 </fieldset>
             </form>

@@ -1,18 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import {Link, Navigate, Outlet} from 'react-router-dom';
-import {clearSession, isLogged} from '../authentication/Session';
+import React, { useEffect, useState } from 'react';
+import { Link, Navigate, Outlet } from 'react-router-dom';
+import { clearSession, isLogged } from '../authentication/Session';
 import '../style/components.css';
-import {getIdByToken, getUserStatus, logout} from "../services/usersServices";
-import {apiURISize} from "./utils/utils";
-
+import { getIdByToken, getUserStatus, logout } from "../services/usersServices";
+import { apiURISize } from "./utils/utils";
+import { View, Image, StyleSheet } from 'react-native';
+//import defaultImage from './utils/default.svg'
+//import defaultImage2 from './utils/exemplo.png'
+//import svgSprite from "./utils/default.svg"
 export default function Home() {
     const [loggedIn, setLoggedIn] = useState<boolean>(isLogged());
     const [error, setError] = useState('');
     const [userId, setUserId] = useState('');
-    const [userIsPlaying, setUserIsPlaying] = useState(false);
-    const [userIsInLobby, setUserIsInLobby] = useState(false);
+    //const [userIsPlaying, setUserIsPlaying] = useState(false);
+    //const [userIsInLobby, setUserIsInLobby] = useState(false);
     const [url, setUrl] = useState('');
-
+    const [dotCode, setDotCode] = useState('');
     useEffect(() => {
         const fetchUserData = async () => {
             if (loggedIn) {
@@ -23,7 +26,7 @@ export default function Home() {
                     const userData = await getUserStatus(idData);
 
                     setError('');
-                    if (userData.properties.isInLobby) {
+                    /*if (userData.properties.isInLobby) {
                         setUrl(userData.entities[0].links[0].href.substring(apiURISize));
                         setUserIsInLobby(true);
                     } else if (userData.properties.isPlaying) {
@@ -32,7 +35,7 @@ export default function Home() {
                     } else {
                         setUserIsInLobby(false);
                         setUserIsPlaying(false);
-                    }
+                    }*/
                 } catch (error) {
                     setError(error.message);
                     clearSession();
@@ -59,40 +62,36 @@ export default function Home() {
         }
     };
 
-    if (userIsPlaying) return <Navigate to={`/gomoku` + url} replace={true}/>;
-    if (userIsInLobby) return <Navigate to={`/gomoku` + url} replace={true}/>;
+    /*if (userIsPlaying) return <Navigate to={`/gomoku` + url} replace={true} />;
+    if (userIsInLobby) return <Navigate to={`/gomoku` + url} replace={true} />;*/
 
     return (
         <div className="containerStyle">
             <div className="headerContainer">
-                <Link to="" className="headerStyle">Welcome to Gomoku</Link>
+                <Link to="" className="headerStyle">Welcome to GDEAT</Link>
             </div>
             {loggedIn ? (
                 <div>
                     <div className="navigationContainerStyle">
                         <>
-                            <Link to="/gomoku/leaderboard" className="linkStyle">
-                                Leaderboard
+                            <Link to="/graphs" className="linkStyle">
+                                List of Graphs
                             </Link>
                             <Link to={`/gomoku/user/${userId}`} className="linkStyle">
                                 Profile
                             </Link>
-                            <Link to="/gomoku/about" className="linkStyle">
+                            <Link to="/about" className="linkStyle">
                                 About
                             </Link>
                             <form onSubmit={handleLogout}>
                                 <button className="button-24" role="button">Logout</button>
                             </form>
+
                         </>
                     </div>
                     <div className="playContainerStyle">
-                        <Link id={"play-config"} to="/gomoku/configuration" className="playStyle">
-                            Play
-                        </Link>
-                    </div>
-                    <div className="playContainerStyle">
-                        <Link to="/gomoku/games" className="playStyle">
-                            Games
+                        <Link to="/graphs/create" className="playStyle">
+                            Generate Graph
                         </Link>
                     </div>
                 </div>
@@ -100,31 +99,40 @@ export default function Home() {
                 <div>
                     <div className="navigationContainerStyle">
                         <>
-                            <Link to="/gomoku/login" className="linkStyle">
+                            <form method="post" encType="multipart/form-data">
+                                <div>
+                                    <label >Choose file to upload</label>
+                                    <input type="file" id="file" name="file" accept='.txt' />
+                                </div>
+                                <div>
+                                    <button>Submit</button>
+                                </div>
+                            </form>
+                            <div>
+                                <textarea value={dotCode} onChange={e => setDotCode(e.target.value)} cols={60} rows={40} />
+                            </div>
+                            <Link to="/users/login" className="linkStyle">
                                 Login
                             </Link>
-                            <Link to="/gomoku/register" className="linkStyle">
+                            <Link to="/users/register" className="linkStyle">
                                 Register
                             </Link>
-                            <Link to="/gomoku/leaderboard" className="linkStyle">
-                                Leaderboard
-                            </Link>
-                            <Link to="/gomoku/about" className="linkStyle">
-                                About
+                            <Link to="/about" className="linkStyle">
+                                about
                             </Link>
                         </>
                     </div>
                     <div className="navigationContainerStyle">
-                        <h1 className="loginOrRegister">↑ Login or Register to play! ↑</h1>
+                        <h1 className="loginOrRegister">↑ Login or Register to Create Graph! ↑</h1>
                     </div>
                     <div className="playContainerStyle">
-                        <Link to="/gomoku/games" className="playStyle">
-                            Games
+                        <Link to="/graphs/create" className="playStyle">
+                            Generate Graph
                         </Link>
                     </div>
                 </div>
             )}
-            <Outlet/>
+            <Outlet />
             {error && <p>{error}</p>}
         </div>
     );

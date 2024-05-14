@@ -1,6 +1,6 @@
-import {get, post} from "./custom/useFetch";
-import {GAME, GAMES, LEADERBOARD, LOBBY, MATCHMAKING} from "./navigation/URIS";
-import {refreshToken} from "./usersServices";
+import { deleteMethod, get, post, put } from "./custom/useFetch";
+import { CREATE, EDIT, DELETE } from "./navigation/URIS";
+import { refreshToken } from "./usersServices";
 
 export async function executeRequestAndRefreshToken(requestFunction, ...args) {
     try {
@@ -17,7 +17,25 @@ export async function executeRequestAndRefreshToken(requestFunction, ...args) {
         throw error;
     }
 }
-
+export async function createGraph(start, max) {
+    return await executeRequestAndRefreshToken(
+        post,
+        CREATE + '?start=' + start + '&max=' + max
+    );
+}
+export async function editGraph(start, max) {
+    return await executeRequestAndRefreshToken(
+        put,
+        EDIT + '?start=' + start + '&max=' + max
+    );
+}
+export async function deleteGraph(start, max) {
+    return await executeRequestAndRefreshToken(
+        deleteMethod,
+        DELETE
+    );
+}
+/*
 export async function getGames(start, max){
     return await executeRequestAndRefreshToken(
         get,
@@ -70,4 +88,4 @@ export async function play(gameId, userId, line, column){
         GAME + '/' + gameId + '/play',
         JSON.stringify({userId, line, column})
     )
-}
+}*/
