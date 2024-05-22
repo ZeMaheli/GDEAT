@@ -39,6 +39,8 @@ dependencies {
 	implementation ("guru.nidi:graphviz-java:0.18.1")
 
 	implementation ("org.springframework.boot:spring-boot-starter-webflux")
+
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 }
 
 tasks.withType<KotlinCompile> {

@@ -27,7 +27,10 @@ CREATE TABLE revoked_access_tokens
 
 create table graphs(
     id                  serial primary key,
-    xml_content         xml
+    name                VARCHAR(64),
+    xml_content         xml,
+
+    UNIQUE(name)
 );
 
 create table users_graphs(

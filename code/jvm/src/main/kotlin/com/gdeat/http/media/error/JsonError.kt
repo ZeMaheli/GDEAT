@@ -5,7 +5,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 
 /**
- * Siren is a specification for representing hypermedia entities in JSON.
+ * Specification for representing hypermedia entities in JSON.
  *
  * @see <a href="https://www.iana.org/assignments/media-types/application/json">Json Specification</a>
  *

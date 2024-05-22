@@ -1,4 +1,4 @@
 package com.gdeat.service.diagrams
 
-interface GraphsService {
+interface DiagramsService {
 }

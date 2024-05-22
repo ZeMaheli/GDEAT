@@ -19,6 +19,9 @@ object PathTemplate {
     const val EDIT_GRAPH = "/graphs/{id}/edit"
     const val DELETE_GRAPH = "/graphs/{id}/delete"
 
+    // AI SERVICE
+    const val GET_RESPONSE = "/generate"
+
     // URI's
     fun home() = URI(HOME)
 
