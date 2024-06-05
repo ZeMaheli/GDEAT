@@ -4,13 +4,17 @@ import com.gdeat.http.controllers.diagrams.models.createDiagram.DiagramCreateInp
 import com.gdeat.http.controllers.diagrams.models.createDiagram.DiagramCreateOutputModel
 import com.gdeat.http.controllers.diagrams.models.deleteDiagram.DeleteDiagramOutputModel
 import com.gdeat.http.controllers.diagrams.models.getDiagram.GetDiagramOutputModel
+import com.gdeat.http.media.siren.Link
 import com.gdeat.http.media.siren.SirenEntity
 import com.gdeat.http.utils.PathTemplate
+import com.gdeat.http.utils.Rels
+import com.gdeat.service.diagrams.DiagramsService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class DiagramController {
+class DiagramController(private val diagramServices: DiagramsService) {
 
     /**
      * Handles the creation of a diagram.
@@ -19,10 +23,20 @@ class DiagramController {
      * @return ResponseEntity with the appropriate status and/or the created diagram.
      */
     @PostMapping(PathTemplate.CREATE_GRAPH)
-    fun createGraph(
+    suspend fun createGraph(
         @RequestBody promptData: DiagramCreateInputModel
     ): ResponseEntity<SirenEntity<DiagramCreateOutputModel>> {
-        TODO()
+        val graphInfoDTO = diagramServices.createGraph(promptData.toGraphCreateDTO())
+
+        val createDiagramEntity = SirenEntity(
+            `class` = listOf(Rels.CREATE_DIAGRAM),
+            properties = DiagramCreateOutputModel(graphInfoDTO),
+            links = listOf(
+                Link(rel = listOf(Rels.CREATE_DIAGRAM), href = PathTemplate.diagramCreate())
+            ),
+        )
+
+        return createDiagramEntity.toResponse(HttpStatus.CREATED)
     }
 
     /**

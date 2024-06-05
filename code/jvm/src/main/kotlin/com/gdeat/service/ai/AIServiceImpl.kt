@@ -1,8 +1,11 @@
 package com.gdeat.service.ai
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.gdeat.config.ExternalAIApiConfig
 import com.gdeat.service.ai.config.models.AIRequest
 import com.gdeat.service.ai.config.models.AIResponse
+import com.gdeat.service.ai.config.models.EntityRelationDiagramInfo
+import com.gdeat.service.exceptions.AIServiceException
 import kotlinx.coroutines.reactive.awaitFirst
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -12,17 +15,38 @@ import org.springframework.web.reactive.function.client.WebClient
 @Transactional(rollbackFor = [Exception::class])
 class AIServiceImpl(
     private val webClient: WebClient,
-    private val config: ExternalAIApiConfig
-) : AIService<AIRequest, AIResponse> {
+    private val config: ExternalAIApiConfig,
+    private val objectMapper: ObjectMapper
+) : AIService<AIRequest, EntityRelationDiagramInfo> {
 
-    override suspend fun generateEntitiesAndRelations(request: AIRequest): AIResponse {
-        val response = webClient.post()
-            .uri(config.apiKey+config.endpoints.processRequest)
-            .bodyValue(request)
-            .retrieve()
-            .bodyToMono(AIResponse::class.java)
-            .awaitFirst()
+    override suspend fun generateEntitiesAndRelations(request: AIRequest): EntityRelationDiagramInfo {
+        val response = requestFromLLM(request)
 
-        return response
+        if (response.response.isEmpty()) {
+            throw AIServiceException("Invalid response from LLM:")
+        }
+
+        return response.response.fromJsonToEntityRelationDiagramInfo()
+    }
+
+    private fun String.fromJsonToEntityRelationDiagramInfo(): EntityRelationDiagramInfo {
+        return try {
+            objectMapper.readValue(this, EntityRelationDiagramInfo::class.java)
+        } catch (ex: Exception) {
+            throw AIServiceException("Invalid JSON response from LLM: $this")
+        }
+    }
+
+    private suspend fun requestFromLLM(request: AIRequest): AIResponse {
+        return try {
+            webClient.post()
+                .uri(config.endpoints.processRequest)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(AIResponse::class.java)
+                .awaitFirst()
+        } catch (ex: Exception) {
+            throw AIServiceException("Error communicating with LLM")
+        }
     }
 }

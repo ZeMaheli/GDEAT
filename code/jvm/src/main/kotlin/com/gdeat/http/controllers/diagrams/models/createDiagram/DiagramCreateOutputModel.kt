@@ -1,6 +1,6 @@
 package com.gdeat.http.controllers.diagrams.models.createDiagram
 
-import com.gdeat.service.diagrams.dtos.deleteDiagram.DeleteDiagramOutputDTO
+import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateOutputDTO
 
 /**
  * A Graph Creation Output Model.
@@ -13,7 +13,7 @@ class DiagramCreateOutputModel(
     val diagramPDF: ByteArray
 ) {
 
-    constructor(deleteDiagramOutputDTO: DeleteDiagramOutputDTO) : this(
+    constructor(deleteDiagramOutputDTO: DiagramCreateOutputDTO) : this(
         diagramCode = deleteDiagramOutputDTO.diagramCode,
         diagramPDF = deleteDiagramOutputDTO.diagramPDF
     )

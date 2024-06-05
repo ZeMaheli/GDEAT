@@ -5,11 +5,9 @@ import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateInputDTO
 /**
  * A Diagram Creation Input Model.
  *
- * @property model the model to be communicated
  * @property prompt the message to be sent
  */
 data class DiagramCreateInputModel(
-    val model: String = "phi",
     val prompt: String
 ) {
 
@@ -19,7 +17,6 @@ data class DiagramCreateInputModel(
      * @return the service DTO
      */
     fun toGraphCreateDTO() = DiagramCreateInputDTO(
-        model = model,
         prompt = prompt
     )
 }

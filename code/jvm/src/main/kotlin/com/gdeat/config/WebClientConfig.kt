@@ -5,10 +5,11 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
-class WebClientConfig {
-
+class WebClientConfig(
+    private val config: ExternalAIApiConfig
+) {
     @Bean
     fun webClient(builder: WebClient.Builder): WebClient {
-        return builder.build()
+        return builder.baseUrl(config.baseUrl).build()
     }
 }

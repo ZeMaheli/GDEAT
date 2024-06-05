@@ -1,5 +1,6 @@
 package com.gdeat.service.ai.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.gdeat.config.ExternalAIApiConfig
 import com.gdeat.service.ai.AIService
 import com.gdeat.service.ai.AIServiceImpl
@@ -14,7 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient
 class AIServiceConfig {
 
     @Bean
-    fun aiService(config: ExternalAIApiConfig, webClient: WebClient): AIService<AIRequest, AIResponse> {
-        return AIServiceImpl(webClient, config)
+    fun aiService(config: ExternalAIApiConfig, webClient: WebClient, objectMapper: ObjectMapper): AIService<AIRequest, AIResponse> {
+        return AIServiceImpl(webClient, config, objectMapper)
     }
 }

@@ -19,13 +19,15 @@ object PathTemplate {
     const val EDIT_GRAPH = "/graphs/{id}/edit"
     const val DELETE_GRAPH = "/graphs/{id}/delete"
 
-    // AI SERVICE
-    const val GET_RESPONSE = "/generate"
-
     // URI's
     fun home() = URI(HOME)
 
     fun usersLogin(): URI = URI(LOGIN)
     fun usersLogout(): URI = URI(LOGOUT)
     fun usersRefreshToken(): URI = URI(REFRESH_TOKEN)
+
+    fun diagramCreate() = URI(CREATE_GRAPH)
+    fun diagramEdit() = URI(EDIT_GRAPH)
+    fun diagramDelete() = URI(DELETE_GRAPH)
+    fun diagramGet() = URI(GET_GRAPH)
 }
