@@ -8,19 +8,24 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
+/*
 @ControllerAdvice
 class ServerErrorHandler {
-    /**
+    */
+/**
      * Handles all other uncaught exceptions related to server.
      *
      * @param ex exception to handle
      * @param request the HTTP request
      * @return response entity with the error message
-     */
+     *//*
+
     @ExceptionHandler(
         value = [
-            Exception::class,
-            AIServiceException::class
+            Exception::class,*/
+/*
+            AIServiceException::class*//*
+
         ]
     )
     fun handleUncaughtExceptions(
@@ -32,4 +37,4 @@ class ServerErrorHandler {
             message = "Internal Server Error",
             details = ex.message
         ).toResponse(HttpStatus.INTERNAL_SERVER_ERROR)
-}
+}*/

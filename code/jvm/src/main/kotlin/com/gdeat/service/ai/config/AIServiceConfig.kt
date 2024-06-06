@@ -5,7 +5,7 @@ import com.gdeat.config.ExternalAIApiConfig
 import com.gdeat.service.ai.AIService
 import com.gdeat.service.ai.AIServiceImpl
 import com.gdeat.service.ai.config.models.AIRequest
-import com.gdeat.service.ai.config.models.AIResponse
+import com.gdeat.service.ai.config.models.EntityRelationDiagramInfo
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.client.WebClient
@@ -15,7 +15,11 @@ import org.springframework.web.reactive.function.client.WebClient
 class AIServiceConfig {
 
     @Bean
-    fun aiService(config: ExternalAIApiConfig, webClient: WebClient, objectMapper: ObjectMapper): AIService<AIRequest, AIResponse> {
+    fun aiService(
+        config: ExternalAIApiConfig,
+        webClient: WebClient,
+        objectMapper: ObjectMapper
+    ): AIService<AIRequest, EntityRelationDiagramInfo> {
         return AIServiceImpl(webClient, config, objectMapper)
     }
 }

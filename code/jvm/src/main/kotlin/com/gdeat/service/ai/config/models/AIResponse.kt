@@ -6,7 +6,7 @@ data class AIResponse(
     val response: String,
     val done: Boolean,
     val done_reason: String,
-    val context: List<Byte>,
+    val context: List<Int>,
     val total_duration: Long,
     val load_duration: Long,
     val prompt_eval_count: Long,

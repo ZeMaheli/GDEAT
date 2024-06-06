@@ -46,7 +46,7 @@ class AIServiceImpl(
                 .bodyToMono(AIResponse::class.java)
                 .awaitFirst()
         } catch (ex: Exception) {
-            throw AIServiceException("Error communicating with LLM")
+            throw ex/*AIServiceException("Error communicating with LLM")*/
         }
     }
 }

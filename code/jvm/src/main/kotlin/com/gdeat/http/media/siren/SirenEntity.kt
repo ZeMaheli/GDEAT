@@ -29,6 +29,6 @@ data class SirenEntity<T>(
         ResponseEntity.status(status).contentType(sirenMediaType).body(this)
 
     companion object {
-        val sirenMediaType = MediaType("application/vnd.siren+json")
+        val sirenMediaType = MediaType("application","vnd.siren+json")
     }
 }

@@ -13,8 +13,8 @@ class DiagramCreateOutputModel(
     val diagramPDF: ByteArray
 ) {
 
-    constructor(deleteDiagramOutputDTO: DiagramCreateOutputDTO) : this(
-        diagramCode = deleteDiagramOutputDTO.diagramCode,
-        diagramPDF = deleteDiagramOutputDTO.diagramPDF
+    constructor(createDiagramOutputDTO: DiagramCreateOutputDTO) : this(
+        diagramCode = createDiagramOutputDTO.diagramCode,
+        diagramPDF = createDiagramOutputDTO.diagramPDF
     )
 }
