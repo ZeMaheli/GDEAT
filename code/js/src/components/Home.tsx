@@ -8,7 +8,9 @@ import { View, Image, StyleSheet } from 'react-native';
 //import save from "./save.png";
 //import edit from './utils/edit.png';
 ///import export from './utils/export.png';
-import module from "./utils/default.svg";
+//import module from "./utils/default.svg";
+import ImageSVG from './image';
+
 export default function Home() {
     const [loggedIn, setLoggedIn] = useState<boolean>(isLogged());
     const [error, setError] = useState('');
@@ -128,7 +130,7 @@ export default function Home() {
                                 about
                             </Link>
                             <div>
-                                <img src={module} alt="React Logo" />
+                                <ImageSVG />
                                 <Link to="/graphs/export" className="linkStyle">
                                     Export
                                 </Link>
