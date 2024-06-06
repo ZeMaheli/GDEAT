@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+/*import React, {useEffect, useRef, useState} from 'react';
 import {Box} from "./Box";
 import {Link, Navigate, useNavigate, useParams} from "react-router-dom";
 import {getSessionToken} from "../authentication/Session";
@@ -203,4 +203,4 @@ export default function Play(){
             {renderPopup()}
         </div>
     )
-}
+}*/

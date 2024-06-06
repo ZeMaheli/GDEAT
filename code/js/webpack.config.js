@@ -4,7 +4,7 @@ module.exports = {
     mode: 'development',
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
-      },
+    },
     module: {
         rules: [
             {
@@ -16,8 +16,12 @@ module.exports = {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader'],
             },
+            {
+                test: /\.(png|jp(e*)g|svg|gif)$/,
+                type: "asset/resource",
+            },
         ],
-    }, 
+    },
 
     devServer: {
         historyApiFallback: true,

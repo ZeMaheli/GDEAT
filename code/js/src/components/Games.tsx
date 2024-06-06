@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+/*import React, {useEffect, useState} from 'react';
 import {getUserById} from "../services/usersServices";
 import {getGames} from "../services/gamesServices";
 import {Link, useNavigate} from "react-router-dom";
@@ -128,3 +128,4 @@ export default function Games() {
     );
 };
 
+*/

@@ -5,9 +5,10 @@ import '../style/components.css';
 import { getIdByToken, getUserStatus, logout } from "../services/usersServices";
 import { apiURISize } from "./utils/utils";
 import { View, Image, StyleSheet } from 'react-native';
-//import defaultImage from './utils/default.svg'
-//import defaultImage2 from './utils/exemplo.png'
-//import svgSprite from "./utils/default.svg"
+//import save from "./save.png";
+//import edit from './utils/edit.png';
+///import export from './utils/export.png';
+import module from "./utils/default.svg";
 export default function Home() {
     const [loggedIn, setLoggedIn] = useState<boolean>(isLogged());
     const [error, setError] = useState('');
@@ -110,6 +111,9 @@ export default function Home() {
                             </form>
                             <div>
                                 <textarea value={dotCode} onChange={e => setDotCode(e.target.value)} cols={60} rows={40} />
+                                <Link to="/graphs/save" className="linkStyle">
+                                    save
+                                </Link>
                             </div>
                             <Link to="/users/login" className="linkStyle">
                                 Login
@@ -117,9 +121,21 @@ export default function Home() {
                             <Link to="/users/register" className="linkStyle">
                                 Register
                             </Link>
+                            <Link to="/graphs" className="linkStyle">
+                                Gallery
+                            </Link>
                             <Link to="/about" className="linkStyle">
                                 about
                             </Link>
+                            <div>
+                                <img src={module} alt="React Logo" />
+                                <Link to="/graphs/export" className="linkStyle">
+                                    Export
+                                </Link>
+                                <Link to="/graphs/edit" className="linkStyle">
+                                    edit
+                                </Link>
+                            </div>
                         </>
                     </div>
                     <div className="navigationContainerStyle">

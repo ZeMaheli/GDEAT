@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+/*import React, {useEffect, useState, useRef} from 'react';
 import {Navigate, useLocation} from "react-router-dom";
 import "../style/components.css";
 import {getIdByToken, getUserById, getUserStatus} from "../services/usersServices";
@@ -116,4 +116,4 @@ export default function Matchmake() {
             )}
         </div>
     )
-}
+}*/

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+/*import React, {useState} from 'react';
 import {Link, useNavigate } from "react-router-dom";
 import {getLeaderboard} from "../services/usersServices";
 import '../style/components.css';
@@ -75,3 +75,4 @@ export default function Leaderboard() {
         </div>
     );
 };
+*/
