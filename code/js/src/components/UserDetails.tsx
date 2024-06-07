@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {getUserById} from "../services/usersServices";
+import {getUserById} from "../Services/usersServices";
 import "../style/components.css"
 
 export default function UserDetails() {

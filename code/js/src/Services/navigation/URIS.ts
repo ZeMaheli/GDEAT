@@ -1,5 +1,5 @@
 
-const URI_PREFIX = "http://localhost:9000/api/";
+const URI_PREFIX = "http://localhost:8080/";
 
 //User
 export const ABOUT = URI_PREFIX + "about";

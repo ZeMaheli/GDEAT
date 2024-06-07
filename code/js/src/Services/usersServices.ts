@@ -5,10 +5,6 @@ export async function about() {
     return await get(ABOUT)
 }
 
-//export async function getLeaderboard(start, max) {
-//    return await get(LEADERBOARD + '?start=' + start + '&max=' + max)
-//}
-
 export async function register(name, email, password) {
     return await post(REGISTER, JSON.stringify({ name, email, password }))
 }
@@ -31,8 +27,4 @@ export async function getIdByToken() {
 
 export async function refreshToken() {
     return await post(REFRESH_TOKEN, undefined)
-}
-
-export async function getUserStatus(userId) {
-    return await get(GET_USER_BY_ID + userId + '/status')
 }

@@ -1,40 +1,41 @@
-import { deleteMethod, get, post, put } from "./custom/useFetch";
-import { CREATE, EDIT, DELETE } from "./navigation/URIS";
-import { refreshToken } from "./usersServices";
+import {deleteMethod, post, put} from "./custom/useFetch";
+import {CREATE, DELETE, EDIT} from "./navigation/URIS";
+import {refreshToken} from "./usersServices";
 
 export async function executeRequestAndRefreshToken(requestFunction, ...args) {
     try {
         const response = await requestFunction(...args);
 
-        if (response.status === 401) {
+/*        if (response.status === 401) {
             // Token expired, refresh it and retry the request
             await refreshToken();
             return requestFunction(...args);
-        }
+        }*/
 
         return response;
     } catch (error) {
         throw error;
     }
 }
-export async function createGraph(start, max) {
-    return await executeRequestAndRefreshToken(
-        post,
-        CREATE + '?start=' + start + '&max=' + max
-    );
+
+export async function createGraph(prompt: string) {
+    return await post(CREATE, prompt)
 }
+
 export async function editGraph(start, max) {
     return await executeRequestAndRefreshToken(
         put,
         EDIT + '?start=' + start + '&max=' + max
     );
 }
+
 export async function deleteGraph(start, max) {
     return await executeRequestAndRefreshToken(
         deleteMethod,
         DELETE
     );
 }
+
 /*
 export async function getGames(start, max){
     return await executeRequestAndRefreshToken(

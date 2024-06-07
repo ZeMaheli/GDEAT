@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {about} from "../services/usersServices";
+import {about} from "../Services/usersServices";
 
 export default function About() {
     const [aboutData, setAboutData] = useState<any>('');

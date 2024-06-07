@@ -1,50 +1,41 @@
-import {
-    createBrowserRouter, RouterProvider,
-} from 'react-router-dom'
+import {createBrowserRouter, RouterProvider,} from 'react-router-dom'
 import React from 'react'
 import Home from "./components/Home";
 import Login from "./authentication/Login";
 import Register from "./authentication/Register";
 import About from "./components/About";
-import UserDetails from "./components/UserDetails";
-import { AuthRequired } from "./authentication/Session";
+import {AuthRequired} from "./authentication/Session";
 import Graph from "./components/Graph"
-import { GRAPHLIST } from './services/navigation/URIS';
-
 
 
 const router = createBrowserRouter([
     {
         "path": "/",
-        "element": <Home />,
+        "element": <Home/>,
         "children": [
             {
                 "path": "/about",
-                "element": <About />,
-            },
-            {
-                "path": "/gomoku/user/:id",
-                "element": <UserDetails />,
+                "element": <About/>,
             },
         ]
     },
     {
         "path": "/gomoku/user/:id",
-        "element": <AuthRequired><Graph /></AuthRequired>,
+        "element": <AuthRequired><Graph/></AuthRequired>,
     },
     {
         "path": "/users/login",
-        "element": <Login />,
+        "element": <Login/>,
     },
     {
         "path": "/users/register",
-        "element": <Register />,
+        "element": <Register/>,
     },
 
 ])
 
 export function Router() {
     return (
-        <RouterProvider router={router} />
+        <RouterProvider router={router}/>
     )
 }

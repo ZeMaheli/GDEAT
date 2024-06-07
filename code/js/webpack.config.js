@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = {
     mode: 'development',
     resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
+        extensions: [".js", ".ts", ".tsx", ".css", ".ico"]
     },
     module: {
         rules: [
@@ -17,20 +17,15 @@ module.exports = {
                 use: ['style-loader', 'css-loader'],
             },
             {
-                test: /\.(png|jp(e*)g|svg|gif)$/,
+                test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
                 type: "asset/resource",
+                use: ['file-loader?name=[name].[ext]']
             },
         ],
     },
 
     devServer: {
         historyApiFallback: true,
-        proxy: {
-            '/api': {
-                target: 'http://localhost:9000',
-                router: () => 'http://localhost:8080',
-            }
-        },
         port: 9000,
         static: path.resolve(__dirname, 'dist')
     },

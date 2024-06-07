@@ -1,7 +1,7 @@
 import { Link, Navigate } from "react-router-dom";
 import React, { useState } from "react";
 import { setSession } from "./Session";
-import { register } from "../services/usersServices";
+import { register } from "../Services/usersServices";
 import {
     containerStyle,
     credentialsLinkStyle,
