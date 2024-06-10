@@ -8,7 +8,6 @@ import {Link} from "./Link"
  */
 export type SubEntity<T> = EmbeddedSubEntity<T> | EmbeddedLink
 
-
 /**
  * A sub-entity that is an embedded link.
  *
@@ -18,14 +17,22 @@ export type SubEntity<T> = EmbeddedSubEntity<T> | EmbeddedLink
  * @property type the media type of the link (optional)
  * @property title the title of the link (optional)
  */
-export class EmbeddedLink {
+export interface IEmbeddedLink {
+    class?: string[]
+    rel: string[]
+    href: string
+    type?: string
+    title?: string
+}
+
+export class EmbeddedLink implements IEmbeddedLink {
     class?: string[]
     rel: string[]
     href: string
     type?: string
     title?: string
 
-    constructor(link: EmbeddedLink) {
+    constructor(link: IEmbeddedLink) {
         this.class = link.class
         this.rel = link.rel
         this.href = link.href
@@ -46,7 +53,16 @@ export class EmbeddedLink {
  * @property actions the actions that can be performed on the entity (optional)
  * @property links the links to other entities (optional)
  */
-export class EmbeddedSubEntity<T> {
+export interface IEmbeddedSubEntity<T> {
+    class?: string[]
+    rel: string[]
+    properties?: T
+    entities?: SubEntity<any>[]
+    actions?: Action[]
+    links?: Link[]
+}
+
+export class EmbeddedSubEntity<T> implements IEmbeddedSubEntity<T> {
     class?: string[]
     rel: string[]
     properties?: T
@@ -54,7 +70,7 @@ export class EmbeddedSubEntity<T> {
     actions?: Action[]
     links?: Link[]
 
-    constructor(entity: EmbeddedSubEntity<T>) {
+    constructor(entity: IEmbeddedSubEntity<T>) {
         this.class = entity.class
         this.rel = entity.rel
         this.properties = entity.properties
@@ -111,7 +127,7 @@ export class EmbeddedSubEntity<T> {
     getEmbeddedSubEntities<T>(): EmbeddedSubEntity<T>[] {
         return this.entities
             ?.filter(entity => !Object.keys(entity).includes("href"))
-            .map(entity => new EmbeddedSubEntity<T>(entity as EmbeddedSubEntity<T>)) ?? []
+            .map(entity => new EmbeddedSubEntity<T>(entity as IEmbeddedSubEntity<T>)) ?? []
     }
 
     /**
@@ -125,10 +141,9 @@ export class EmbeddedSubEntity<T> {
     getEmbeddedLinks(...rels: string[]): EmbeddedLink[] {
         const embeddedLinks = this.entities
             ?.filter(entity => Object.keys(entity).includes("href"))
-            .map(entity => new EmbeddedLink(entity as EmbeddedLink)) ?? []
+            .map(entity => new EmbeddedLink(entity as IEmbeddedLink)) ?? []
 
         return embeddedLinks
             .filter(link => rels.every((rel) => link.rel.includes(rel)))
     }
 }
-

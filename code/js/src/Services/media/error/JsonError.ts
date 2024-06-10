@@ -1,33 +1,27 @@
 /**
- * A problem that occurred during the processing of a request.
- * Extends the Error class to allow for the use of the throw keyword.
+ * Specification for representing hypermedia entities in JSON.
  *
- * @property type a URI that identifies the problem type
- * @property title a short, human-readable summary of the problem
- * @property status the HTTP status code for this occurrence of the problem
- * @property detail a human-readable explanation specific to this occurrence of the problem
- * @property instance a URI that identifies the specific occurrence of the problem
+ * @see <a href="https://www.iana.org/assignments/media-types/application/json">Json Specification</a>
  *
- * @see <a href="https://tools.ietf.org/html/rfc7807">Problem Details for HTTP APIs</a>
+ * @property code the http status code of the error
+ * @property message the message of the error
+ * @property details detailed message of the error
  */
-export class Problem extends Error {
-    type: string
-    title: string
-    status: number
-    detail?: string
-    instance?: string
-    properties?: {
-        [key: string]: string
-    }
-    
-    constructor(problem: Problem) {
-        super(problem.title)
-        this.type = problem.type
-        this.title = problem.title
-        this.status = problem.status
-        this.detail = problem.detail
-        this.instance = problem.instance
-        this.properties = problem.properties
+export interface JsonError {
+    code: number;
+    message: string;
+    details?: string;
+}
+
+export class JsonErrorResponse implements JsonError {
+    code: number;
+    message: string;
+    details?: string;
+
+    constructor(code: number, message: string, details?: string) {
+        this.code = code;
+        this.message = message;
+        this.details = details;
     }
 }
 

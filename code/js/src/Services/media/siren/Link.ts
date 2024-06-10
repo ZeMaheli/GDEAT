@@ -7,14 +7,22 @@
  * @property title the title of the link (optional)
  * @property type the media type of the link (optional)
  */
-export class Link {
+export interface ILink {
+    rel: string[]
+    class?: string[]
+    href: string
+    title?: string
+    type?: string
+}
+
+export class Link implements ILink {
     rel: string[]
     class?: string[]
     href: string
     title?: string
     type?: string
 
-    constructor(link: Link) {
+    constructor(link: ILink) {
         this.rel = link.rel
         this.class = link.class
         this.href = link.href

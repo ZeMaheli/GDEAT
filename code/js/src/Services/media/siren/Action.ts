@@ -9,7 +9,17 @@
  * @property type the media type of the action (optional)
  * @property fields the fields of the action (optional)
  */
-export class Action {
+export interface IAction {
+    name: string
+    class?: string[]
+    method?: string
+    href: string
+    title?: string
+    type?: string
+    fields?: Field[]
+}
+
+export class Action implements IAction {
     name: string
     class?: string[]
     method?: string
@@ -18,7 +28,7 @@ export class Action {
     type?: string
     fields?: Field[]
 
-    constructor(action: Action) {
+    constructor(action: IAction) {
         this.name = action.name
         this.class = action.class
         this.method = action.method
@@ -36,12 +46,18 @@ export class Action {
  * @property value the value of the field (optional)
  * @property type the type of the field (optional)
  */
-export class Field {
+export interface IField {
+    name: string
+    value?: string
+    type?: string
+}
+
+export class Field implements IField {
     name: string
     value?: string
     type?: string
 
-    constructor(field: Field) {
+    constructor(field: IField) {
         this.name = field.name
         this.value = field.value
         this.type = field.type

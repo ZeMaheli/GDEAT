@@ -22,6 +22,6 @@ data class JsonError(
         ResponseEntity.status(status).contentType(errorMediaType).body(this)
 
     companion object {
-        val errorMediaType = MediaType("application/json")
+        val errorMediaType = MediaType("application","json")
     }
 }
