@@ -20,8 +20,16 @@ const router = createBrowserRouter([
         ]
     },
     {
-        "path": "/gomoku/user/:id",
+        "path": "/graphs",
         "element": <AuthRequired><Graph/></AuthRequired>,
+    },
+    {
+        "path": "/graphs/create",
+        "element": <Login />,
+    },
+    {
+        "path": "/users/login",
+        "element": <Login />,
     },
     {
         "path": "/users/login",

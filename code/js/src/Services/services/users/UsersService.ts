@@ -2,6 +2,7 @@ import {RegisterOutputModel} from "./models/register/RegisterOutputModel";
 import {LoginOutputModel} from "./models/login/LoginOutputModel";
 import {LogoutOutputModel} from "./models/logout/LogoutOutputModel";
 import {RefreshTokenOutput} from "./models/refreshToken/RefreshTokenOutputModel";
+import {post} from "../../custom/useFetch";
 
 export namespace UsersService {
 

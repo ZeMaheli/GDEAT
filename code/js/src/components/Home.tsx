@@ -1,12 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, Outlet} from 'react-router-dom';
 import {clearSession, isLogged} from '../authentication/Session';
 import '../style/components.css';
-import {logout} from "../Services/usersServices";
+import {getIdByToken,  logout} from "../Services/usersServices";
 //import save from "./save.png";
 //import edit from './utils/edit.png';
 ///import export from './utils/export.png';
 //import module from "./utils/default.svg";
+import ImageSVG from './image';
+import {post} from "../Services/custom/useFetch";
 import {createGraph} from '../Services/gamesServices';
 
 export default function Home() {
@@ -19,6 +21,21 @@ export default function Home() {
     const [submitting, setSubmitting] = useState(false);
     const [prompt, setPrompt] = useState("{" +
         "\"prompt\": \"Pretendemos guardar informação sobre os profissionais de saúde, doentes e sessões de um centro de fisioterapia. Cada doente é identificado pelo seu CC. Cada profissional de saúde é identificado pela sua cédula profissional (CP). As sessões dizem respeito a um profissional de saúde e um doente. Cada sessão ´e identificada por um número de ordem (NO), que é único para cada doente (e.g. existem as sessões 1, 2 e 3 do doente Manuel, e as sessões 1, 2 e 3 da doente Maria).\"}");
+
+    const [content, setContent] = useState('');
+
+    const handleFileRead = (e) => {
+        setContent("")
+        const file = e.target.files[0];
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => setContent(text => text + e.target.result);
+        reader.readAsText(file);
+    };
+
 
     const handleLogout = async (ev: React.FormEvent<HTMLFormElement>): Promise<boolean> => {
         ev.preventDefault();
@@ -38,7 +55,7 @@ export default function Home() {
     const handleCreateGraph = async () => {
         try {
             setSubmitting(true);
-            const response = await createGraph(prompt)
+            const response = await createGraph("{ \n \"prompt\": \"" + content.replace(/\r\n/g, '') +"\" \n}")//(prompt)
             console.log('Graph created', response.data);
             const arrayBuffer = await response.properties.diagramPDFs;
             // Assuming the byte array is in response.data
@@ -61,6 +78,10 @@ export default function Home() {
             setSubmitting(false);
         }
     };
+
+    function Generate() {
+        post("/graphs/create",content).then(r => r)
+    }
 
     return (
         <div className="containerStyle">
@@ -95,15 +116,13 @@ export default function Home() {
                 <div>
                     <div className="navigationContainerStyle">
                         <>
-                            <form method="post" encType="multipart/form-data">
-                                <div>
-                                    <label>Choose file to upload</label>
-                                    <input type="file" id="file" name="file" accept='.txt'/>
-                                </div>
-                                <div>
-                                    <button>Submit</button>
-                                </div>
-                            </form>
+
+                            <div>
+                                <label >Choose file to upload</label>
+                                <input type="file" id="file" name="file" accept='.txt' onChange={handleFileRead} />
+                                <p>{content}</p>
+                            </div>
+
                             <div>
                                 <textarea value={dotCode} onChange={e => setDotCode(e.target.value)} cols={60}
                                           rows={40}/>
@@ -124,6 +143,7 @@ export default function Home() {
                                 about
                             </Link>
                             <div>
+                                <ImageSVG />
                                 <Link to="/graphs/export" className="linkStyle">
                                     Export
                                 </Link>

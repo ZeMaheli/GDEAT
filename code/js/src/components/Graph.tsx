@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-export default function Graph(): React.ReactElement {
+export default function Graphs(): React.ReactElement {
     return (
-        <div>TODO</div>
+        <div>Hello World</div>
     )
 }
