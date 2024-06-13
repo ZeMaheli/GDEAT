@@ -12,7 +12,7 @@ import {
 } from "../authentication/style/authenticationBoxStyle";
 
 export default function Login(): React.ReactElement {
-    const [inputs, setInputs] = useState({ email: "", password: "" })
+    const [inputs, setInputs] = useState({ username: "", password: "" })
     const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState('')
     const [redirect, setRedirect] = useState(false)
@@ -22,9 +22,9 @@ export default function Login(): React.ReactElement {
     function handleSubmit(ev: React.FormEvent<HTMLFormElement>) {
         ev.preventDefault()
         setSubmitting(true)
-        const email = inputs.email
+        const username = inputs.username
         const password = inputs.password
-        login(email, password)
+        login(username, password)
             .then(res => {
                 //setSession(res.properties.accessToken);
                 setSubmitting(false)
@@ -52,10 +52,10 @@ export default function Login(): React.ReactElement {
                 <form onSubmit={handleSubmit} style={formStyle}>
                     <fieldset disabled={submitting}>
                         <div style={inputContainerStyle}>
-                            <label htmlFor="email">Email</label>
+                            <label htmlFor="username">username</label>
                             <input
-                                id="email"
-                                name="email"
+                                id="username"
+                                name="username"
                                 onChange={handleChange}
                                 style={inputStyle} />
                         </div>
@@ -75,7 +75,7 @@ export default function Login(): React.ReactElement {
                             </button>
                         </div>
                         <p style={credentialsLinkStyle}>
-                            Don't have an account? <Link id={"sign-up-redirect"} to="/users/register">Sign Up</Link>
+                            Don't have an account? <Link id={"sign-up-redirect"} to="/register">Sign Up</Link>
                         </p>
                     </fieldset>
                 </form>

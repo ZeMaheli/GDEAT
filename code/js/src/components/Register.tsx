@@ -90,7 +90,7 @@ export default function Register(): React.ReactElement {
                         </button>
                     </div>
                     <p style={credentialsLinkStyle}>
-                        Already have an account? <Link id={"login-redirect"} to="/users/login">Log In</Link>
+                        Already have an account? <Link id={"login-redirect"} to="/login">Log In</Link>
                     </p>
                 </fieldset>
             </form>

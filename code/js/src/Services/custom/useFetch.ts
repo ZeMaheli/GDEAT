@@ -1,4 +1,4 @@
-async function fetchData(uri: string, method: string, body?: string, signal=null) {
+async function fetchData(uri: string, method: string, body?: string, signal? :AbortSignal | null ) {
     try {
         const options: RequestInit = {
             credentials: 'include',
@@ -21,7 +21,7 @@ async function fetchData(uri: string, method: string, body?: string, signal=null
     }
 }
 
-export function post(uri: string, body?: string, signal=null) {
+export function post(uri: string, body?: string, signal?: AbortSignal | null ) {
     return fetchData(uri, 'POST', body,signal)
 }
 

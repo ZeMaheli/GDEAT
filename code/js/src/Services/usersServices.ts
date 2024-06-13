@@ -6,11 +6,11 @@ export async function about() {
 }
 
 export async function register(name: string, email: string, password: string) {
-    return await post(REGISTER, JSON.stringify({ name, email, password }))
+    return await post(REGISTER, JSON.stringify({ username: name, email: email, password: password }))
 }
 
-export async function login(email: string, password: string) {
-    return await post(LOGIN, JSON.stringify({ email, password }))
+export async function login(username: string, password: string) {
+    return await post(LOGIN, JSON.stringify({ username: username, password: password }))
 }
 
 export async function logout() {
