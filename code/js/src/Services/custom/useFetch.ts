@@ -1,4 +1,4 @@
-async function fetchData(uri: string, method: string, body?: string, signal? :AbortSignal | null ) {
+async function fetchData(uri: string, method: string, body?: string, signal?: AbortSignal) {
     try {
         const options: RequestInit = {
             credentials: 'include',
@@ -7,7 +7,7 @@ async function fetchData(uri: string, method: string, body?: string, signal? :Ab
                 'Content-Type': 'application/json',
             },
             body: body,
-            signal:signal
+            signal: signal
         }
         const response = await fetch(uri, options)
         const data = await response.json()
@@ -20,17 +20,18 @@ async function fetchData(uri: string, method: string, body?: string, signal? :Ab
         throw error
     }
 }
-
-export function post(uri: string, body?: string, signal?: AbortSignal | null ) {
-    return fetchData(uri, 'POST', body,signal)
+export function post(uri: string, body?: string, signal?: AbortSignal) {
+    return fetchData(uri, 'POST', body, signal)
 }
 
 export function get(uri: string) {
     return fetchData(uri, 'GET', undefined)
 }
+
 export function deleteMethod(uri: string) {
     return fetchData(uri, 'DELETE', undefined)
 }
+
 export function put(uri: string, body: string) {
     return fetchData(uri, 'POST', body)
 }

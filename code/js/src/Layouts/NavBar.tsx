@@ -28,6 +28,9 @@ export default function NavBar() {
             navigate('/');
             return;
         }
+        //
+        //
+        //
         sessionManager.clearSession();
         navigate('/');
     };
@@ -42,7 +45,6 @@ export default function NavBar() {
         setAnchorElNav(null);
     };
 
-    // Filter out the current page
     const filteredPages = pages.filter(page => page.href !== location.pathname);
 
     return (

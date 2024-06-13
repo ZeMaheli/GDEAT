@@ -1,43 +1,40 @@
-import { Link, Navigate } from "react-router-dom";
-import React, { useState } from "react";
-import { login } from "../Services/usersServices";
+import {Link, Navigate} from "react-router-dom";
+import React, {useState} from "react";
+import {login} from "../Services/usersServices";
 import {
-    containerStyle,
-    credentialsLinkStyle,
-    errorStyle,
+    credentialsLinkStyle, errorStyle,
+    formContainerStyle,
     formStyle,
-    homeLinkStyle,
-    inputContainerStyle,
-    inputStyle
-} from "../authentication/style/authenticationBoxStyle";
+    homeLinkStyle, inputContainerStyle, inputStyle, labelStyle,
+    outerContainerStyle, submitButtonStyle
+} from "./style/authenticationBoxStyle";
 
 export default function Login(): React.ReactElement {
-    const [inputs, setInputs] = useState({ username: "", password: "" })
-    const [submitting, setSubmitting] = useState(false)
-    const [error, setError] = useState('')
-    const [redirect, setRedirect] = useState(false)
+    const [inputs, setInputs] = useState({ email: "", password: "" });
+    const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState('');
+    const [redirect, setRedirect] = useState(false);
 
     if (redirect) return <Navigate to="/" replace={true} />;
 
     function handleSubmit(ev: React.FormEvent<HTMLFormElement>) {
-        ev.preventDefault()
-        setSubmitting(true)
-        const username = inputs.username
-        const password = inputs.password
-        login(username, password)
+        ev.preventDefault();
+        setSubmitting(true);
+        const { email, password } = inputs;
+        login(email, password)
             .then(res => {
-                //setSession(res.properties.accessToken);
-                setSubmitting(false)
+                // setSession(res.properties.accessToken);
+                setSubmitting(false);
                 if (res) {
-                    setRedirect(true)
+                    setRedirect(true);
                 } else {
-                    setError("Invalid email or password")
+                    setError("Invalid email or password");
                 }
             })
             .catch(error => {
-                setSubmitting(false)
-                setError(error.message)
-            })
+                setSubmitting(false);
+                setError(error.message);
+            });
     }
 
     function handleChange(ev: React.FormEvent<HTMLInputElement>) {
@@ -46,28 +43,31 @@ export default function Login(): React.ReactElement {
     }
 
     return (
-        <><div />
-            <div style={containerStyle}>
-                <Link className={"home-redirect"} to="/" style={homeLinkStyle}>Home</Link>
+        <div style={outerContainerStyle}>
+            <div style={formContainerStyle}>
+                <Link className="home-redirect" to="/" style={homeLinkStyle}>Home</Link>
                 <form onSubmit={handleSubmit} style={formStyle}>
-                    <fieldset disabled={submitting}>
+                    <fieldset disabled={submitting} style={{ border: 'none' }}>
                         <div style={inputContainerStyle}>
-                            <label htmlFor="username">username</label>
+                            <label htmlFor="email" style={labelStyle}>Email</label>
                             <input
                                 id="username"
                                 name="username"
                                 onChange={handleChange}
-                                style={inputStyle} />
+                                value={inputs.email}
+                                style={inputStyle}
+                            />
                         </div>
                         <div style={inputContainerStyle}>
-                            <label htmlFor="password">Password</label>
+                            <label htmlFor="password" style={labelStyle}>Password</label>
                             <input
                                 id="password"
                                 type="password"
                                 name="password"
                                 value={inputs.password}
                                 onChange={handleChange}
-                                style={inputStyle} />
+                                style={inputStyle}
+                            />
                         </div>
                         <div>
                             <button type="submit" style={submitButtonStyle}>
@@ -75,23 +75,12 @@ export default function Login(): React.ReactElement {
                             </button>
                         </div>
                         <p style={credentialsLinkStyle}>
-                            Don't have an account? <Link id={"sign-up-redirect"} to="/register">Sign Up</Link>
+                            Don't have an account? <Link id="sign-up-redirect" to="/register" style={{ color: '#00A67E', textDecoration: 'none' }}>Sign Up</Link>
                         </p>
                     </fieldset>
                 </form>
                 {error && <p style={errorStyle}>{error}</p>}
             </div>
-        </>
+        </div>
     );
-};
-
-const submitButtonStyle: React.CSSProperties = {
-    marginTop: '10px',
-    width: '100%',
-    padding: '10px',
-    borderRadius: '5px',
-    border: 'none',
-    backgroundColor: '#0048ff',
-    color: 'white',
-    cursor: 'pointer',
-};
+}

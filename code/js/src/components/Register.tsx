@@ -1,23 +1,26 @@
-import { Link, Navigate } from "react-router-dom";
-import React, { useState } from "react";
-import { register } from "../Services/usersServices";
+import {Link, Navigate} from "react-router-dom";
+import React, {useState} from "react";
+import {register} from "../Services/usersServices";
 import {
-    containerStyle,
     credentialsLinkStyle,
     errorStyle,
+    formContainerStyle,
     formStyle,
     homeLinkStyle,
     inputContainerStyle,
-    inputStyle
-} from "../authentication/style/authenticationBoxStyle";
+    inputStyle,
+    labelStyle,
+    outerContainerStyle,
+    submitButtonStyle
+} from "./style/authenticationBoxStyle";
 
 export default function Register(): React.ReactElement {
-    const [inputs, setInputs] = useState({ email: "", username: "", password: "" })
+    const [inputs, setInputs] = useState({email: "", username: "", password: ""})
     const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState('')
     const [redirect, setRedirect] = useState(false)
 
-    if (redirect) return <Navigate to="/" replace={true} />;
+    if (redirect) return <Navigate to="/" replace={true}/>;
 
     function handleSubmit(ev: React.FormEvent<HTMLFormElement>) {
         ev.preventDefault()
@@ -43,70 +46,61 @@ export default function Register(): React.ReactElement {
 
     function handleChange(ev: React.FormEvent<HTMLInputElement>) {
         const name = ev.currentTarget.name;
-        setInputs({ ...inputs, [name]: ev.currentTarget.value })
+        setInputs({...inputs, [name]: ev.currentTarget.value})
     }
 
+
     return (
-        <div style={containerStyle}>
-            <Link className={"home-redirect"} to="/" style={homeLinkStyle}>Home</Link>
-            <form onSubmit={handleSubmit} style={formStyle}>
-                <fieldset disabled={submitting}>
-                    <div style={inputContainerStyle}>
-                        <label htmlFor="email">Email</label>
-                        <input
-                            id="email"
-                            type="text"
-                            name="email"
-                            value={inputs.email}
-                            onChange={handleChange}
-                            style={inputStyle}
-                        />
-                    </div>
-                    <div style={inputContainerStyle}>
-                        <label htmlFor="username">Username</label>
-                        <input
-                            id="username"
-                            type="text"
-                            name="username"
-                            value={inputs.username}
-                            onChange={handleChange}
-                            style={inputStyle}
-                        />
-                    </div>
-                    <div style={inputContainerStyle}>
-                        <label htmlFor="password">Password</label>
-                        <input
-                            id="password"
-                            type="password"
-                            name="password"
-                            value={inputs.password}
-                            onChange={handleChange}
-                            style={inputStyle}
-                        />
-                    </div>
-                    <div>
-                        <button type="submit" style={submitButtonStyle}>
-                            {submitting ? 'Registering...' : 'Register'}
-                        </button>
-                    </div>
-                    <p style={credentialsLinkStyle}>
-                        Already have an account? <Link id={"login-redirect"} to="/login">Log In</Link>
-                    </p>
-                </fieldset>
-            </form>
-            {error && <p style={errorStyle}>{error}</p>}
+        <div style={outerContainerStyle}>
+            <div style={formContainerStyle}>
+                <Link className="home-redirect" to="/" style={homeLinkStyle}>Home</Link>
+                <form onSubmit={handleSubmit} style={formStyle}>
+                    <fieldset disabled={submitting} style={{ border: 'none' }}>
+                        <div style={inputContainerStyle}>
+                            <label htmlFor="email" style={labelStyle}>Email</label>
+                            <input
+                                id="email"
+                                type="text"
+                                name="email"
+                                value={inputs.email}
+                                onChange={handleChange}
+                                style={inputStyle}
+                            />
+                        </div>
+                        <div style={inputContainerStyle}>
+                            <label htmlFor="username" style={labelStyle}>Username</label>
+                            <input
+                                id="username"
+                                type="text"
+                                name="username"
+                                value={inputs.username}
+                                onChange={handleChange}
+                                style={inputStyle}
+                            />
+                        </div>
+                        <div style={inputContainerStyle}>
+                            <label htmlFor="password" style={labelStyle}>Password</label>
+                            <input
+                                id="password"
+                                type="password"
+                                name="password"
+                                value={inputs.password}
+                                onChange={handleChange}
+                                style={inputStyle}
+                            />
+                        </div>
+                        <div>
+                            <button type="submit" style={submitButtonStyle}>
+                                {submitting ? 'Registering...' : 'Register'}
+                            </button>
+                        </div>
+                        <p style={credentialsLinkStyle}>
+                            Already have an account? <Link id="login-redirect" to="/login" style={{ color: '#00A67E', textDecoration: 'none' }}>Log In</Link>
+                        </p>
+                    </fieldset>
+                </form>
+                {error && <p style={errorStyle}>{error}</p>}
+            </div>
         </div>
     );
 };
-
-const submitButtonStyle: React.CSSProperties = {
-    marginTop: '10px',
-    width: '100%',
-    padding: '10px',
-    borderRadius: '5px',
-    border: 'none',
-    backgroundColor: '#28a745',
-    color: 'white',
-    cursor: 'pointer',
-};
-
