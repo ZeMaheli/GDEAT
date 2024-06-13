@@ -1,13 +1,14 @@
 {
-    "compilerOptions": {
-      "jsx": "react" ,
-      "esModuleInterop" : true,
-      "lib": [
-        "decorators",
-        "dom",
-        "es5",
-        "scripthost",
-        "es2015.promise"
-      ]
-    }
-  }
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["es2015", "dom"],
+    "jsx": "react-jsx",  // or "react" for older versions
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

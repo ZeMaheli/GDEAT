@@ -5,11 +5,11 @@ export async function about() {
     return await get(ABOUT)
 }
 
-export async function register(name, email, password) {
+export async function register(name: string, email: string, password: string) {
     return await post(REGISTER, JSON.stringify({ name, email, password }))
 }
 
-export async function login(email, password) {
+export async function login(email: string, password: string) {
     return await post(LOGIN, JSON.stringify({ email, password }))
 }
 
@@ -17,7 +17,7 @@ export async function logout() {
     return await post(LOGOUT, undefined)
 }
 
-export async function getUserById(userId) {
+export async function getUserById(userId: string) {
     return await get(GET_USER_BY_ID + userId)
 }
 

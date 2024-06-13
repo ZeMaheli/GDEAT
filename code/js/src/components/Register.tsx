@@ -1,6 +1,5 @@
 import { Link, Navigate } from "react-router-dom";
 import React, { useState } from "react";
-import { setSession } from "./Session";
 import { register } from "../Services/usersServices";
 import {
     containerStyle,
@@ -10,7 +9,7 @@ import {
     homeLinkStyle,
     inputContainerStyle,
     inputStyle
-} from "./style/authenticationBoxStyle";
+} from "../authentication/style/authenticationBoxStyle";
 
 export default function Register(): React.ReactElement {
     const [inputs, setInputs] = useState({ email: "", username: "", password: "" })
@@ -28,7 +27,7 @@ export default function Register(): React.ReactElement {
         const password = inputs.password
         register(username, email, password)
             .then(res => {
-                setSession(res.properties.accessToken);
+                //setSession(res.properties.accessToken);
                 setSubmitting(false)
                 if (res) {
                     setRedirect(true)

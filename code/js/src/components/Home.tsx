@@ -1,6 +1,7 @@
+
 import React, {useEffect, useState} from 'react';
 import {Link, Outlet} from 'react-router-dom';
-import {clearSession, isLogged} from '../authentication/Session';
+import {useSessionManager, useLoggedIn} from '../Utils/Session';
 import '../style/components.css';
 import {getIdByToken,  logout} from "../Services/usersServices";
 //import save from "./save.png";
@@ -9,10 +10,9 @@ import {getIdByToken,  logout} from "../Services/usersServices";
 //import module from "./utils/default.svg";
 import ImageSVG from './image';
 import {post} from "../Services/custom/useFetch";
-import {createGraph} from '../Services/gamesServices';
 
 export default function Home() {
-    const [loggedIn, setLoggedIn] = useState<boolean>(isLogged());
+/*    const [loggedIn, setLoggedIn] = useState<boolean>(useLoggedIn());
     const [error, setError] = useState('');
     const [userId, setUserId] = useState('');
     const [dotCode, setDotCode] = useState('');
@@ -24,7 +24,7 @@ export default function Home() {
 
     const [content, setContent] = useState('');
 
-    const handleFileRead = (e) => {
+    const handleFileRead = (e: { target: { files: any[]; }; }) => {
         setContent("")
         const file = e.target.files[0];
         if (!file) {
@@ -43,7 +43,7 @@ export default function Home() {
             const data = await logout();
             console.log('Logout successful', data);
             setLoggedIn(false);
-            clearSession();
+            useSessionManager();
             return true;
         } catch (error) {
             console.error('Logout failed', error);
@@ -52,7 +52,7 @@ export default function Home() {
         }
     };
 
-    const handleCreateGraph = async () => {
+    /!*const handleCreateGraph = async () => {
         try {
             setSubmitting(true);
             const response = await createGraph("{ \n \"prompt\": \"" + content.replace(/\r\n/g, '') +"\" \n}")//(prompt)
@@ -77,7 +77,7 @@ export default function Home() {
             setError((error as Error).message);
             setSubmitting(false);
         }
-    };
+    };*!/
 
     function Generate() {
         post("/graphs/create",content).then(r => r)
@@ -107,7 +107,7 @@ export default function Home() {
                         </>
                     </div>
                     <div className="playContainerStyle">
-                        <button onClick={handleCreateGraph} className="playStyle" disabled={submitting}>
+                        <button onClick={{/!*handleCreateGraph*!/}} className="playStyle" disabled={submitting}>
                             Generate Graph
                         </button>
                     </div>
@@ -168,10 +168,14 @@ export default function Home() {
             {graphUrl && (
                 <div>
                     <h2>Generated Graph</h2>
-                    {/* Display the SVG image */}
+                    {/!* Display the SVG image *!/}
                     <img src={graphUrl} alt="Generated Graph"/>
                 </div>
             )}
         </div>
+    );*/
+    return (
+        <div></div>
     );
 }
+

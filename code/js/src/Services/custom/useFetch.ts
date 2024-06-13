@@ -1,4 +1,4 @@
-async function fetchData(uri, method, body,signal=null) {
+async function fetchData(uri: string, method: string, body?: string, signal=null) {
     try {
         const options: RequestInit = {
             credentials: 'include',
@@ -21,16 +21,16 @@ async function fetchData(uri, method, body,signal=null) {
     }
 }
 
-export function post(uri, body,signal=null) {
+export function post(uri: string, body?: string, signal=null) {
     return fetchData(uri, 'POST', body,signal)
 }
 
-export function get(uri) {
+export function get(uri: string) {
     return fetchData(uri, 'GET', undefined)
 }
-export function deleteMethod(uri) {
+export function deleteMethod(uri: string) {
     return fetchData(uri, 'DELETE', undefined)
 }
-export function put(uri, body) {
+export function put(uri: string, body: string) {
     return fetchData(uri, 'POST', body)
 }

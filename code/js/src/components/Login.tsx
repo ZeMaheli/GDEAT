@@ -1,6 +1,5 @@
 import { Link, Navigate } from "react-router-dom";
 import React, { useState } from "react";
-import { setSession } from "./Session";
 import { login } from "../Services/usersServices";
 import {
     containerStyle,
@@ -10,13 +9,7 @@ import {
     homeLinkStyle,
     inputContainerStyle,
     inputStyle
-} from "./style/authenticationBoxStyle";
-
-class Div extends React.Component {
-    render() {
-        return <h1>Hello </h1>;
-    }
-}
+} from "../authentication/style/authenticationBoxStyle";
 
 export default function Login(): React.ReactElement {
     const [inputs, setInputs] = useState({ email: "", password: "" })
@@ -33,7 +26,7 @@ export default function Login(): React.ReactElement {
         const password = inputs.password
         login(email, password)
             .then(res => {
-                setSession(res.properties.accessToken);
+                //setSession(res.properties.accessToken);
                 setSubmitting(false)
                 if (res) {
                     setRedirect(true)

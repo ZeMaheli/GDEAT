@@ -1,6 +1,20 @@
 import {createRoot} from "react-dom/client";
 import React from "react";
-import {Router} from "./Router";
+import {BrowserRouter as Router} from 'react-router-dom'
+import {Auth} from "./Utils/Session";
+import App from "./App";
 
-const root = createRoot(document.getElementById('container'));
-root.render(<Router/>);
+const container = document.getElementById('container');
+
+if (!container) {
+    throw new Error('Container element not found');
+}
+
+const root = createRoot(container);
+root.render(
+    <Router>
+        <Auth>
+            <App/>
+        </Auth>
+    </Router>
+)

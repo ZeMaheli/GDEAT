@@ -1,15 +1,15 @@
 import React from "react";
 import Home from "../components/Home";
-import Login from "../authentication/Login";
-import Register from "../authentication/Register";
+import Login from "../components/Login";
+import Register from "../components/Register";
 import {Uris} from "./navigation/Uris";
-import Graphs from "../components/Graph";
+import Graphs from "../components/Graphs";
 
 const routes = [
-    {path: Uris.HOME, element: <Home/>},
-    {path: Uris.LOGIN, element: <Login/>},
-    {path: Uris.REGISTER, element: <Register/>},
-    {path: Uris.GRAPHS, element: <Graphs/>}
+    {path: Uris.HOME, element: <Home/>, AuthRequired: false},
+    {path: Uris.LOGIN, element: <Login/>, AuthRequired: false},
+    {path: Uris.REGISTER, element: <Register/>, AuthRequired: false},
+    {path: Uris.GRAPHS, element: <Graphs/>, AuthRequired: true}
 ];
 
 export default routes;
