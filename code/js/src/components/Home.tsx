@@ -10,12 +10,16 @@ import ImageSVG from './image';
 import {DiagramsService} from "../Services/services/diagrams/DiagramsServices";
 import createDiagram = DiagramsService.createDiagram;
 import {CREATE_DIAGRAM} from "../Services/navigation/URIS";
+import { saveAs } from "file-saver"
+import {Button} from "@mui/material";
+
+
 
 export default function Home() {
     const [loggedIn, setLoggedIn] = useState<boolean>(useLoggedIn());
     const [error, setError] = useState('');
     const [userId, setUserId] = useState('');
-    const [dotCode, setDotCode] = useState('');
+    const [dotCode, setDotCode] = useState("");
     const [byteArray, setByteArray] = useState<Uint8Array>(new Uint8Array());
     const [graphUrl, setGraphUrl] = useState<string | null>(null); // State to store the URL of the SVG image
     const [submitting, setSubmitting] = useState(false);
@@ -23,7 +27,14 @@ export default function Home() {
         "\"prompt\": \"Pretendemos guardar informação sobre os profissionais de saúde, doentes e sessões de um centro de fisioterapia. Cada doente é identificado pelo seu CC. Cada profissional de saúde é identificado pela sua cédula profissional (CP). As sessões dizem respeito a um profissional de saúde e um doente. Cada sessão ´e identificada por um número de ordem (NO), que é único para cada doente (e.g. existem as sessões 1, 2 e 3 do doente Manuel, e as sessões 1, 2 e 3 da doente Maria).\"}");
 
     const [content, setContent] = useState('');
+    const Index = () => {
+        const downloadImage = () => {
+            if (graphUrl != null)
+            saveAs(graphUrl, 'image.svg') // Put your image URL here.
+        }
 
+        return <Button onClick={downloadImage}>Export</Button>
+    }
     const handleFileRead = (e: React.ChangeEvent<HTMLInputElement>) => {
         setContent("");
         const g = e.target;
@@ -48,6 +59,9 @@ export default function Home() {
             const response = await createDiagram(CREATE_DIAGRAM, "{ \n \"prompt\": \"" + content.replace(/\r\n/g, '') + "\" \n}");
             const prop = response.properties;
             if (prop) {
+
+                setDotCode( it=>(it[0] + prop.diagramCode).substring(1)) // arranjar melhor maneira de atualizar o codigo dot
+
                 const base64String = prop.diagramPDF; // Assuming prop.diagramPDF is the Base64 string
 
                 // Log the Base64 string to debug
@@ -113,10 +127,24 @@ export default function Home() {
                         </div>
                         <div>
                             {/* Ensure ImageSVG is defined or import correctly */}
-                            <ImageSVG/>
-                            <Link to="/graphs/export" className="linkStyle">
-                                Export
-                            </Link>
+                            {graphUrl? (
+                                <div>
+                                   waiting for the graph to generate
+                                </div>
+                            ):(
+                                <div>
+                                    <ImageSVG></ImageSVG>
+                                </div>
+                            )}
+                            {graphUrl && (
+
+                                <div>
+                                    <h2>Generated Graph</h2>
+                                    <img src={graphUrl} alt={"Generated Graph"}/>
+
+                                </div>
+                            )}
+                            <p className={"linkStyle"}>{Index()}</p>
                             <Link to="/graphs/edit" className="linkStyle">
                                 edit
                             </Link>
@@ -134,12 +162,6 @@ export default function Home() {
             )}
             <Outlet/>
             {error && <p>{error}</p>}
-            {graphUrl && (
-                <div>
-                    <h2>Generated Graph</h2>
-                    <img src={graphUrl} alt="Generated Graph"/>
-                </div>
-            )}
         </div>
     );
 }
