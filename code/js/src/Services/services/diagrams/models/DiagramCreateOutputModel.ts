@@ -3,12 +3,51 @@ import {SirenEntity} from "../../../media/siren/SirenEntity";
 /**
  * A Graph Creation Output Model.
  *
- * @property diagramCode the code of the graph
- * @property diagramPDF the visualization of the graph
+ * @property entities an object with entities names and their attributes
+ * @property relations an object with the different relations between the entities
  */
 interface DiagramCreateOutputModel {
-    diagramCode: String,
-    diagramPDF: Uint8Array
+    entities: { [key: string]: string[] };
+    relations: { [key: string]: { [key: string]: string } };
+}
+
+export function createDiagramCreateOutputModel(data: DiagramCreateOutputModel): DiagramCreateOutputModel & { createNeatoDiagram: () => string } {
+    return {
+        ...data,
+        createNeatoDiagram: function(): string {
+            let graphCode = "graph ER {\n" +
+                "fontname=\"Helvetica,Arial,sans-serif\"\n" +
+                "node [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
+                "edge [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
+                "layout=neato\n"
+
+            // Define entity nodes
+            graphCode += "\tnode [shape=box];"
+            for (const entity in this.entities) {
+                graphCode += entity + "; \n"
+            }
+
+            for (const entity in this.entities) {
+                this.entities[entity].forEach((atr: string, index: number) => {
+                    let attributeName = `${entity}_attr${index}`;
+                    graphCode += `\tnode [shape=ellipse, label=\"${atr}\"] ${attributeName};\n`
+                    graphCode += `\t${entity} -- ${attributeName};\n`
+                });
+            }
+
+            for (const relation in this.relations) {
+                for (let relationMapKey in this.relations[relation]) {
+                    graphCode += `${relation} -- ${relationMapKey} [label=\"${this.relations[relation][relationMapKey]}\"];`
+                }
+            }
+
+            graphCode += ("\tlabel = \"Entity Relation Diagram\"\n")
+            graphCode += ("\tfontsize=20\n")
+            graphCode += ("}")
+
+            return graphCode;
+        }
+    };
 }
 
 export type DiagramCreateOutput = SirenEntity<DiagramCreateOutputModel>

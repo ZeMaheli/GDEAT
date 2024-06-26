@@ -5,7 +5,7 @@ import com.gdeat.config.ExternalAIApiConfig
 import com.gdeat.service.ai.AIService
 import com.gdeat.service.ai.AIServiceImpl
 import com.gdeat.service.ai.config.models.AIRequest
-import com.gdeat.service.ai.config.models.EntityRelationDiagramInfo
+import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateOutputDTO
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.client.WebClient
@@ -19,7 +19,7 @@ class AIServiceConfig {
         config: ExternalAIApiConfig,
         webClient: WebClient,
         objectMapper: ObjectMapper
-    ): AIService<AIRequest, EntityRelationDiagramInfo> {
+    ): AIService<AIRequest, DiagramCreateOutputDTO> {
         return AIServiceImpl(webClient, config, objectMapper)
     }
 }

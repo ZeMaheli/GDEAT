@@ -5,16 +5,16 @@ import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateOutputDTO
 /**
  * A Graph Creation Output Model.
  *
- * @property diagramCode the code of the graph
- * @property diagramPDF the visualization of the graph
+ * @property entities an object with entities names and their attributes
+ * @property relations an object with the different relations between the entities
  */
 class DiagramCreateOutputModel(
-    val diagramCode: String,
-    val diagramPDF: ByteArray
+    val Entities: Map<String, List<String>>,
+    val Relations: Map<String, Map<String, String>>
 ) {
 
     constructor(createDiagramOutputDTO: DiagramCreateOutputDTO) : this(
-        diagramCode = createDiagramOutputDTO.diagramCode,
-        diagramPDF = createDiagramOutputDTO.diagramPDF
+        Entities = createDiagramOutputDTO.Entities,
+        Relations = createDiagramOutputDTO.Relations
     )
 }

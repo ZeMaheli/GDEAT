@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.gdeat.config.ExternalAIApiConfig
 import com.gdeat.service.ai.config.models.AIRequest
 import com.gdeat.service.ai.config.models.AIResponse
-import com.gdeat.service.ai.config.models.EntityRelationDiagramInfo
+import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateOutputDTO
 import com.gdeat.service.exceptions.AIServiceException
 import kotlinx.coroutines.reactive.awaitFirst
 import org.springframework.stereotype.Service
@@ -17,9 +17,9 @@ class AIServiceImpl(
     private val webClient: WebClient,
     private val config: ExternalAIApiConfig,
     private val objectMapper: ObjectMapper
-) : AIService<AIRequest, EntityRelationDiagramInfo> {
+) : AIService<AIRequest, DiagramCreateOutputDTO> {
 
-    override suspend fun generateEntitiesAndRelations(request: AIRequest): EntityRelationDiagramInfo {
+    override suspend fun generateEntitiesAndRelations(request: AIRequest): DiagramCreateOutputDTO {
         val response = requestFromLLM(request)
 
         if (response.response.isEmpty()) {
@@ -29,9 +29,9 @@ class AIServiceImpl(
         return response.response.fromJsonToEntityRelationDiagramInfo()
     }
 
-    private fun String.fromJsonToEntityRelationDiagramInfo(): EntityRelationDiagramInfo {
+    private fun String.fromJsonToEntityRelationDiagramInfo(): DiagramCreateOutputDTO {
         return try {
-            objectMapper.readValue(this, EntityRelationDiagramInfo::class.java)
+            objectMapper.readValue(this, DiagramCreateOutputDTO::class.java)
         } catch (ex: Exception) {
             throw AIServiceException("Invalid JSON response from LLM: $this")
         }
@@ -46,7 +46,7 @@ class AIServiceImpl(
                 .bodyToMono(AIResponse::class.java)
                 .awaitFirst()
         } catch (ex: Exception) {
-            throw ex/*AIServiceException("Error communicating with LLM")*/
+            throw AIServiceException("Error communicating with LLM")
         }
     }
 }

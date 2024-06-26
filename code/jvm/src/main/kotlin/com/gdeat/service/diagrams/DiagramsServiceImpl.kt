@@ -2,33 +2,28 @@ package com.gdeat.service.diagrams
 
 import com.gdeat.service.ai.AIServiceImpl
 import com.gdeat.service.ai.config.models.AIRequest
-import com.gdeat.service.ai.config.models.EntityRelationDiagramInfo
 import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateInputDTO
 import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateOutputDTO
 import com.gdeat.service.diagrams.dtos.deleteDiagram.DeleteDiagramOutputDTO
 import com.gdeat.service.diagrams.dtos.getDiagram.GetDiagramOutputDTO
-import guru.nidi.graphviz.engine.Format
-import guru.nidi.graphviz.engine.Graphviz
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.io.ByteArrayOutputStream
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
 class DiagramsServiceImpl(private val aiService: AIServiceImpl) : DiagramsService {
 
     override suspend fun createGraph(diagramCreateInputDTO: DiagramCreateInputDTO): DiagramCreateOutputDTO {
-        val diagramInfo = aiService.generateEntitiesAndRelations(AIRequest.toAIRequest(diagramCreateInputDTO))
-        val neatoCode = withContext(Dispatchers.IO) {
-            createNeatoCode(diagramInfo)
-        }
-        val diagramPDF = createNeatoDiagram(neatoCode)
-        return DiagramCreateOutputDTO(neatoCode, diagramPDF)
+        val l = StringBuilder()
+
+        return aiService.generateEntitiesAndRelations(AIRequest.toAIRequest(diagramCreateInputDTO))
+        /*        val neatoCode = withContext(Dispatchers.IO) {
+                    createNeatoCode(diagramInfo)
+                }
+                val diagramPDF = createNeatoDiagram(neatoCode)*/
     }
 
-    fun createNeatoCode(diagramInfo: EntityRelationDiagramInfo): String {
+    /*fun createNeatoCode(diagramInfo: EntityRelationDiagramInfo): String {
         val stringBuilder = StringBuilder()
         stringBuilder.appendLine("graph ER {")
         stringBuilder.appendLine("\tfontname=\"Helvetica,Arial,sans-serif\"")
@@ -69,7 +64,7 @@ class DiagramsServiceImpl(private val aiService: AIServiceImpl) : DiagramsServic
         val outputStream = ByteArrayOutputStream()
         Graphviz.fromString(neatoCode).render(Format.SVG).toOutputStream(outputStream)
         return outputStream.toByteArray()
-    }
+    }*/
 
     override fun getGraph(): GetDiagramOutputDTO {
         TODO("Not yet implemented")

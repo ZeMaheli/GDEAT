@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {Link, Outlet} from 'react-router-dom';
 import {useLoggedIn} from '../Utils/Session';
 import '../style/components.css';
@@ -6,35 +6,36 @@ import '../style/components.css';
 //import edit from './utils/edit.png';
 ///import export from './utils/export.png';
 //import module from "./utils/default.svg";
-import ImageSVG from './image';
 import {DiagramsService} from "../Services/services/diagrams/DiagramsServices";
-import createDiagram = DiagramsService.createDiagram;
 import {CREATE_DIAGRAM} from "../Services/navigation/URIS";
-import { saveAs } from "file-saver"
+import {saveAs} from "file-saver"
 import {Button} from "@mui/material";
-
+import {instance} from '@viz-js/viz';
+import {createDiagramCreateOutputModel} from '../Services/services/diagrams/models/DiagramCreateOutputModel';
+import createDiagram = DiagramsService.createDiagram;
 
 
 export default function Home() {
     const [loggedIn, setLoggedIn] = useState<boolean>(useLoggedIn());
-    const [error, setError] = useState('');
-    const [userId, setUserId] = useState('');
-    const [dotCode, setDotCode] = useState("");
-    const [byteArray, setByteArray] = useState<Uint8Array>(new Uint8Array());
+    const [error, setError] = useState<string>('');
+    const [dotCode, setDotCode] = useState<string>('');
     const [graphUrl, setGraphUrl] = useState<string | null>(null); // State to store the URL of the SVG image
-    const [submitting, setSubmitting] = useState(false);
-    const [prompt, setPrompt] = useState("{" +
+    const [submitting, setSubmitting] = useState<boolean>(false);
+    const [prompt, setPrompt] = useState<string>("{" +
         "\"prompt\": \"Pretendemos guardar informação sobre os profissionais de saúde, doentes e sessões de um centro de fisioterapia. Cada doente é identificado pelo seu CC. Cada profissional de saúde é identificado pela sua cédula profissional (CP). As sessões dizem respeito a um profissional de saúde e um doente. Cada sessão ´e identificada por um número de ordem (NO), que é único para cada doente (e.g. existem as sessões 1, 2 e 3 do doente Manuel, e as sessões 1, 2 e 3 da doente Maria).\"}");
 
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState<string>('');
+    const svgContainerRef = useRef<HTMLDivElement>(null); // Ref to hold the SVG container
+
     const Index = () => {
         const downloadImage = () => {
             if (graphUrl != null)
-            saveAs(graphUrl, 'image.svg') // Put your image URL here.
+                saveAs(graphUrl, 'image.svg') // Put your image URL here.
         }
 
         return <Button onClick={downloadImage}>Export</Button>
     }
+
     const handleFileRead = (e: React.ChangeEvent<HTMLInputElement>) => {
         setContent("");
         const g = e.target;
@@ -56,40 +57,23 @@ export default function Home() {
     const handleCreateGraph = async () => {
         try {
             setSubmitting(true);
-            const response = await createDiagram(CREATE_DIAGRAM, "{ \n \"prompt\": \"" + content.replace(/\r\n/g, '') + "\" \n}");
+            const response = await createDiagram(CREATE_DIAGRAM, prompt);
             const prop = response.properties;
             if (prop) {
+                const diagramModel = createDiagramCreateOutputModel(prop);
+                let graphCode = diagramModel.createNeatoDiagram();
 
-                setDotCode( it=>(it[0] + prop.diagramCode).substring(1)) // arranjar melhor maneira de atualizar o codigo dot
+                instance().then(viz => {
+                    let diagramSVG = viz.renderSVGElement(graphCode);
 
-                const base64String = prop.diagramPDF; // Assuming prop.diagramPDF is the Base64 string
+                    const container = svgContainerRef.current;
+                    if (container) {
+                        container.innerHTML = ''; // Clear previous SVG if any
+                        container.appendChild(diagramSVG); // Append the new SVG
+                    }
 
-                // Log the Base64 string to debug
-                console.log('Base64 String:', base64String);
-
-                // Decode the Base64 string
-                const binaryString = window.atob(base64String.toString());
-
-                // Convert binary string to a byte array
-                const len = binaryString.length;
-                const bytes = new Uint8Array(len);
-                for (let i = 0; i < len; i++) {
-                    bytes[i] = binaryString.charCodeAt(i);
-                }
-
-                // Create a Blob from the byte array
-                const blob = new Blob([bytes], { type: 'image/svg+xml' });
-
-                // Create an object URL for the Blob
-                const url = URL.createObjectURL(blob);
-
-                // Log the URL to debug
-                console.log('Generated SVG URL:', url);
-
-                // Store the URL in the state
-                setGraphUrl(url);
-
-                setSubmitting(false);
+                    setSubmitting(false);
+                });
             }
         } catch (error) {
             console.error('Graph creation failed', error);
@@ -126,25 +110,9 @@ export default function Home() {
                             </Link>
                         </div>
                         <div>
-                            {/* Ensure ImageSVG is defined or import correctly */}
-                            {graphUrl? (
-                                <div>
-                                   waiting for the graph to generate
-                                </div>
-                            ):(
-                                <div>
-                                    <ImageSVG></ImageSVG>
-                                </div>
-                            )}
-                            {graphUrl && (
-
-                                <div>
-                                    <h2>Generated Graph</h2>
-                                    <img src={graphUrl} alt={"Generated Graph"}/>
-
-                                </div>
-                            )}
-                            <p className={"linkStyle"}>{Index()}</p>
+                            <Link to="/graphs/export" className="linkStyle">
+                                Export
+                            </Link>
                             <Link to="/graphs/edit" className="linkStyle">
                                 edit
                             </Link>
@@ -162,6 +130,7 @@ export default function Home() {
             )}
             <Outlet/>
             {error && <p>{error}</p>}
+            <div ref={svgContainerRef}></div>
         </div>
     );
 }
