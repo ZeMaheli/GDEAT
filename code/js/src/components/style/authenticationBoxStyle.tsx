@@ -70,3 +70,4 @@ export const errorStyle: React.CSSProperties = {
     color: '#FF0000',
     marginTop: '10px',
 };
+

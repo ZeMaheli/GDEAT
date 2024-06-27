@@ -16,15 +16,15 @@ export function createDiagramCreateOutputModel(data: DiagramCreateOutputModel): 
         ...data,
         createNeatoDiagram: function(): string {
             let graphCode = "graph ER {\n" +
-                "fontname=\"Helvetica,Arial,sans-serif\"\n" +
-                "node [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
-                "edge [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
-                "layout=neato\n"
+                "\tfontname=\"Helvetica,Arial,sans-serif\"\n" +
+                "\tnode [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
+                "\tedge [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
+                "\tlayout=neato\n"
 
             // Define entity nodes
-            graphCode += "\tnode [shape=box];"
+            graphCode += "\tnode [shape=box]; "
             for (const entity in this.entities) {
-                graphCode += entity + "; \n"
+                graphCode += entity + ";"
             }
 
             for (const entity in this.entities) {
