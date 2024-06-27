@@ -10,7 +10,7 @@ import {
 } from "./style/authenticationBoxStyle";
 
 export default function Login(): React.ReactElement {
-    const [inputs, setInputs] = useState({ email: "", password: "" });
+    const [inputs, setInputs] = useState({ username: "", password: "" });
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
     const [redirect, setRedirect] = useState(false);
@@ -20,15 +20,15 @@ export default function Login(): React.ReactElement {
     function handleSubmit(ev: React.FormEvent<HTMLFormElement>) {
         ev.preventDefault();
         setSubmitting(true);
-        const { email, password } = inputs;
-        login(email, password)
+        const { username, password } = inputs;
+        login(username, password)
             .then(res => {
                 // setSession(res.properties.accessToken);
                 setSubmitting(false);
                 if (res) {
                     setRedirect(true);
                 } else {
-                    setError("Invalid email or password");
+                    setError("Invalid username or password");
                 }
             })
             .catch(error => {
@@ -49,12 +49,12 @@ export default function Login(): React.ReactElement {
                 <form onSubmit={handleSubmit} style={formStyle}>
                     <fieldset disabled={submitting} style={{ border: 'none' }}>
                         <div style={inputContainerStyle}>
-                            <label htmlFor="email" style={labelStyle}>Email</label>
+                            <label htmlFor="username" style={labelStyle}>username</label>
                             <input
                                 id="username"
                                 name="username"
                                 onChange={handleChange}
-                                value={inputs.email}
+                                value={inputs.username}
                                 style={inputStyle}
                             />
                         </div>

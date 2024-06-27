@@ -37,19 +37,23 @@ class UsersServiceImpl(
 ) : UsersService {
 
     override fun register(registerInputDTO: RegisterInputDTO): RegisterOutputDTO {
+        println("UsersService working")
         val username = registerInputDTO.username
         val password = registerInputDTO.password
         val email = registerInputDTO.email
 
         if (usersRepository.existsByUsername(username)) {
+            println("User with username $username already exists")
             throw AlreadyExistsException("User with $username username already exists")
         }
 
         if (usersRepository.existsByEmail(email)) {
+            println("User with email $email already exists")
             throw AlreadyExistsException("User with $email email already exists")
         }
 
         if (password.length < 12) {
+            println("Password is too short")
             throw InvalidPasswordException("Invalid password length. Must be at least 12 characters long")
         }
 
@@ -60,7 +64,7 @@ class UsersServiceImpl(
                 email = email
             )
         )
-
+        println(user)
         val (accessToken, refreshToken) = createTokens(user = user)
 
         return RegisterOutputDTO(
@@ -139,6 +143,7 @@ class UsersServiceImpl(
      * @return the access and refresh tokens
      */
     private fun createTokens(user: User): Tokens {
+        println("createTokens working")
         if (refreshTokensRepository.countByUser(user = user) >= serverConfig.maxRefreshTokens) {
             refreshTokensRepository
                 .getRefreshTokensOfUser(user).first()
@@ -150,7 +155,7 @@ class UsersServiceImpl(
         val (refreshToken, expirationDate) = jwtProvider.createRefreshToken(jwtPayload = jwtPayload)
 
         val refreshTokenHash = securityConfig.hashToken(token = refreshToken)
-
+        println(refreshTokenHash)
         refreshTokensRepository.save(
             RefreshToken(
                 user = user,

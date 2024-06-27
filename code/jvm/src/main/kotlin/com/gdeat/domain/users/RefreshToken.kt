@@ -16,7 +16,7 @@ class RefreshToken {
     @JoinColumn(name = "user_id", nullable = false)
     val user: User
 
-    @Column(name = "token_hash", nullable = false, length = TOKEN_HASH_LENGTH)
+    @Column(name = "token_hash", nullable = false, length = MAX_TOKEN_HASH_LENGTH)
     val tokenHash: String
 
     @Column(name = "expiration_date", nullable = false)
@@ -27,8 +27,12 @@ class RefreshToken {
         tokenHash: String,
         expirationDate: Timestamp
     ) {
-        if (tokenHash.length != TOKEN_HASH_LENGTH)
-            throw InvalidTokenException("Invalid token hash. Must have a length of $TOKEN_HASH_LENGTH")
+        println("tokenhash length= ${tokenHash.length}")
+        if (tokenHash.length > MAX_TOKEN_HASH_LENGTH){
+            println("Invalid token hash. Must have a max length of $MAX_TOKEN_HASH_LENGTH")
+            throw InvalidTokenException("Invalid token hash. Must have a max length of $MAX_TOKEN_HASH_LENGTH")
+        }
+
 
         this.user = user
         this.tokenHash = tokenHash
@@ -36,6 +40,6 @@ class RefreshToken {
     }
 
     companion object {
-        const val TOKEN_HASH_LENGTH = 512
+        const val MAX_TOKEN_HASH_LENGTH = 512
     }
 }

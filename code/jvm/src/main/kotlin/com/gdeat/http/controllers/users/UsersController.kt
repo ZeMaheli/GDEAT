@@ -42,10 +42,15 @@ class UsersController(private val usersServices: UsersService) {
         @RequestBody userData: RegisterInputModel,
         response: HttpServletResponse
     ): ResponseEntity<SirenEntity<RegisterOutputModel>> {
+        println(userData)
+        println(userData.toRegisterInputDTO())
         val userRegistryDTO = usersServices.register(userData.toRegisterInputDTO())
-
+        println("toRegisterInputDTO Working")
+        println(response)
+        println(userRegistryDTO.accessToken)
+        println(userRegistryDTO.refreshToken)
         setTokenCookies(response, userRegistryDTO.accessToken, userRegistryDTO.refreshToken)
-
+        println("setTokenCookies Working")
         val registerOutputEntity = SirenEntity(
             `class` = listOf(Rels.REGISTER),
             properties = RegisterOutputModel(userRegistryDTO),
