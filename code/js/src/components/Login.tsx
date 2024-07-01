@@ -1,6 +1,7 @@
 import {Link, Navigate} from "react-router-dom";
 import React, {useState} from "react";
 import {login} from "../Services/usersServices";
+import {useSessionManager} from "../Utils/Session";
 import {
     credentialsLinkStyle, errorStyle,
     formContainerStyle,
@@ -14,7 +15,7 @@ export default function Login(): React.ReactElement {
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
     const [redirect, setRedirect] = useState(false);
-
+    const { session,setSession ,clearSession} = useSessionManager();
     if (redirect) return <Navigate to="/" replace={true} />;
 
     function handleSubmit(ev: React.FormEvent<HTMLFormElement>) {
@@ -23,9 +24,10 @@ export default function Login(): React.ReactElement {
         const { username, password } = inputs;
         login(username, password)
             .then(res => {
-                // setSession(res.properties.accessToken);
+
                 setSubmitting(false);
                 if (res) {
+                    setSession(res.properties.accessToken);
                     setRedirect(true);
                 } else {
                     setError("Invalid username or password");
