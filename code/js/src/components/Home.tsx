@@ -88,6 +88,10 @@ export default function Home():React.ReactElement {
         }
     };
 
+    function SaveButtonHandler() {
+        return undefined;
+    }
+
     return (
         <Box className="container">
             <Box className="left">
@@ -132,6 +136,15 @@ export default function Home():React.ReactElement {
                     </Button>
                 </Box>
                 <Box className="bottom" ref={svgContainerRef}/>
+                {loggedIn &&
+                    <Button variant="contained"
+                            color="primary"
+                            disabled={dotCode == "" }
+                            onClick={SaveButtonHandler()}
+                            style={{marginTop: '16px'}}
+                    >save graph info</Button>
+                }
+                {loggedIn && <div>loggedIn true</div>}
             </Box>
         </Box>
     );
