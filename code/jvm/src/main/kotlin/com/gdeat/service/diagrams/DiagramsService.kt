@@ -10,7 +10,5 @@ interface DiagramsService {
 
     fun getGraph(): GetDiagramOutputDTO
 
-    fun editGraph()
-
     fun deleteGraph(): DeleteDiagramOutputDTO
 }

@@ -1,6 +1,4 @@
-package com.gdeat.service.ai.config.models
-
-import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateInputDTO
+package externalaiservice.ai.config.models
 
 data class AIRequest(
     val model: String = "llama3",
@@ -284,9 +282,5 @@ data class AIRequest(
             92,
             128009
         )
-
-        fun toAIRequest(diagramCreateInputDTO: DiagramCreateInputDTO): AIRequest {
-            return AIRequest(prompt = diagramCreateInputDTO.prompt, context = context)
-        }
     }
 }

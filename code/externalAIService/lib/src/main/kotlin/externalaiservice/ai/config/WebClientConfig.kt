@@ -1,4 +1,4 @@
-package com.gdeat.config
+package externalaiservice.ai.config
 
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
@@ -13,6 +13,11 @@ import java.time.Duration
 class WebClientConfig(
     private val config: ExternalAIApiConfig
 ) {
+    @Bean
+    fun webClientBuilder(): WebClient.Builder {
+        return WebClient.builder()
+    }
+
     @Bean
     fun webClient(builder: WebClient.Builder): WebClient {
         val httpClient = HttpClient.create()

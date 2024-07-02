@@ -1,4 +1,4 @@
-package com.gdeat.service.exceptions
+package externalaiservice.exceptions
 
 /**
  * Exception thrown when there's an error requesting to LLM.

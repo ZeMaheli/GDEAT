@@ -1,7 +1,7 @@
 package com.gdeat.http.pipeline.exceptionhandler
 
 import com.gdeat.http.media.error.JsonError
-import com.gdeat.service.exceptions.AIServiceException
+import externalaiservice.exceptions.AIServiceException
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -22,7 +22,6 @@ class ServerErrorHandler {
         value = [
             Exception::class,
             AIServiceException::class
-
         ]
     )
     fun handleUncaughtExceptions(

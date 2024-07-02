@@ -1,4 +1,4 @@
-package com.gdeat.service.ai.config.models
+package externalaiservice.ai.config.models
 
 data class AIResponse(
     val model: String,

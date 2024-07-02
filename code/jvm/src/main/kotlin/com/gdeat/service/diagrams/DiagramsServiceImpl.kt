@@ -1,76 +1,35 @@
 package com.gdeat.service.diagrams
 
-import com.gdeat.service.ai.AIServiceImpl
-import com.gdeat.service.ai.config.models.AIRequest
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateInputDTO
 import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateOutputDTO
 import com.gdeat.service.diagrams.dtos.deleteDiagram.DeleteDiagramOutputDTO
 import com.gdeat.service.diagrams.dtos.getDiagram.GetDiagramOutputDTO
+import externalaiservice.ai.AIServiceImpl
+import externalaiservice.exceptions.AIServiceException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
-class DiagramsServiceImpl(private val aiService: AIServiceImpl) : DiagramsService {
+class DiagramsServiceImpl(
+    private val aiService: AIServiceImpl,
+    private val objectMapper: ObjectMapper
+) : DiagramsService {
 
     override suspend fun createGraph(diagramCreateInputDTO: DiagramCreateInputDTO): DiagramCreateOutputDTO {
-        val l = StringBuilder()
-
-        return aiService.generateEntitiesAndRelations(AIRequest.toAIRequest(diagramCreateInputDTO))
-        /*        val neatoCode = withContext(Dispatchers.IO) {
-                    createNeatoCode(diagramInfo)
-                }
-                val diagramPDF = createNeatoDiagram(neatoCode)*/
+        return aiService.generateEntitiesAndRelations(diagramCreateInputDTO.toAIRequest()).response.fromJsonToEntityRelationDiagramInfo()
     }
 
-    /*fun createNeatoCode(diagramInfo: EntityRelationDiagramInfo): String {
-        val stringBuilder = StringBuilder()
-        stringBuilder.appendLine("graph ER {")
-        stringBuilder.appendLine("\tfontname=\"Helvetica,Arial,sans-serif\"")
-        stringBuilder.appendLine("\tnode [fontname=\"Helvetica,Arial,sans-serif\"]")
-        stringBuilder.appendLine("\tedge [fontname=\"Helvetica,Arial,sans-serif\"]")
-        stringBuilder.appendLine("\tlayout=neato")
-
-        // Define entity nodes
-        stringBuilder.appendLine("\tnode [shape=box];")
-        diagramInfo.Entities.keys.forEach { entity ->
-            stringBuilder.appendLine("\t$entity;")
+    private fun String.fromJsonToEntityRelationDiagramInfo(): DiagramCreateOutputDTO {
+        return try {
+            objectMapper.readValue(this, DiagramCreateOutputDTO::class.java)
+        } catch (ex: Exception) {
+            throw AIServiceException("Invalid JSON response from LLM: $this")
         }
-
-        // Define attribute nodes and their connections
-        diagramInfo.Entities.forEach { (entity, attributes) ->
-            attributes.forEachIndexed { index, attribute ->
-                val attributeName = "${entity}_attr$index"
-                stringBuilder.appendLine("\tnode [shape=ellipse, label=\"$attribute\"] $attributeName;")
-                stringBuilder.appendLine("\t$entity -- $attributeName;")
-            }
-        }
-
-        // Define relationships between entities
-        diagramInfo.Relations.forEach { (entity1, relationMap) ->
-            relationMap.forEach { (entity2, relation) ->
-                stringBuilder.appendLine("\t$entity1 -- $entity2 [label=\"$relation\"];")
-            }
-        }
-
-        stringBuilder.appendLine("\tlabel = \"Entity Relation Diagram\"")
-        stringBuilder.appendLine("\tfontsize=20")
-        stringBuilder.appendLine("}")
-
-        return stringBuilder.toString()
     }
-
-    private fun createNeatoDiagram(neatoCode: String): ByteArray {
-        val outputStream = ByteArrayOutputStream()
-        Graphviz.fromString(neatoCode).render(Format.SVG).toOutputStream(outputStream)
-        return outputStream.toByteArray()
-    }*/
 
     override fun getGraph(): GetDiagramOutputDTO {
-        TODO("Not yet implemented")
-    }
-
-    override fun editGraph() {
         TODO("Not yet implemented")
     }
 
