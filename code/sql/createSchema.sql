@@ -25,20 +25,13 @@ CREATE TABLE revoked_access_tokens
     UNIQUE (user_id, token_hash)
 );
 
-create table graphs(
+create table diagrams(
     id                  serial primary key,
+    user_id         INT           NOT NULL REFERENCES users (id),
     name                VARCHAR(64),
-    xml_content         xml,
+    prompt              TEXT,
+    data                JSONB,
 
-    UNIQUE(name)
+    UNIQUE(name, user_id)
 );
 
-create table users_graphs(
-    id                  serial primary key,
-    graph_id            int not null,
-    user_id             int not null,
-
-    CONSTRAINT user_identification FOREIGN KEY (user_id) REFERENCES users (id),
-    CONSTRAINT graph_identification FOREIGN KEY (graph_id) REFERENCES graphs (id),
-    UNIQUE(graph_id, user_id)
-);

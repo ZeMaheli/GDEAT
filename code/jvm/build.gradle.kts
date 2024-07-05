@@ -29,6 +29,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.postgresql:postgresql:42.7.3")
+    implementation("com.vladmihalcea:hibernate-types-52:2.21.1")
 
     implementation("org.springframework.security:spring-security-crypto")
 

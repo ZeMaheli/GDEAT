@@ -5,7 +5,7 @@ import java.sql.Timestamp
 import com.gdeat.domain.exceptions.InvalidTokenException
 
 @Entity
-@Table(name = "refresh_tokens")
+@Table(name = "refresh_tokens", uniqueConstraints = [UniqueConstraint(columnNames = ["user", "tokenHash"])])
 class RefreshToken {
     @Id
     @Column(name = "id")
@@ -27,7 +27,6 @@ class RefreshToken {
         tokenHash: String,
         expirationDate: Timestamp
     ) {
-        println("tokenhash length= ${tokenHash.length}")
         if (tokenHash.length > MAX_TOKEN_HASH_LENGTH){
             println("Invalid token hash. Must have a max length of $MAX_TOKEN_HASH_LENGTH")
             throw InvalidTokenException("Invalid token hash. Must have a max length of $MAX_TOKEN_HASH_LENGTH")

@@ -14,10 +14,11 @@ object PathTemplate {
     const val REFRESH_TOKEN = "/users/refresh-token"
 
     // GRAPH
-    const val CREATE_GRAPH = "/graphs/create"
-    const val GET_GRAPH = "/graphs/{id}"
-    const val EDIT_GRAPH = "/graphs/{id}/edit"
-    const val DELETE_GRAPH = "/graphs/{id}/delete"
+    const val CREATE_DIAGRAM = "/graphs/create"
+    const val STORE_DIAGRAM = "/graphs/save"
+    const val GET_DIAGRAM = "/graphs/{id}"
+    const val GET_DIAGRAMS = "/graphs"
+    const val DELETE_DIAGRAMS = "/graphs/{id}/delete"
 
     // URI's
     fun home() = URI(HOME)
@@ -26,8 +27,9 @@ object PathTemplate {
     fun usersLogout(): URI = URI(LOGOUT)
     fun usersRefreshToken(): URI = URI(REFRESH_TOKEN)
 
-    fun diagramCreate() = URI(CREATE_GRAPH)
-    fun diagramEdit() = URI(EDIT_GRAPH)
-    fun diagramDelete() = URI(DELETE_GRAPH)
-    fun diagramGet() = URI(GET_GRAPH)
+    fun diagramCreate() = URI(CREATE_DIAGRAM)
+    fun diagramsStore() = URI(STORE_DIAGRAM)
+    fun diagramsGet() = URI(GET_DIAGRAMS)
+    fun diagramDelete() = URI(DELETE_DIAGRAMS)
+    fun diagramGet() = URI(GET_DIAGRAM)
 }
