@@ -1,14 +1,12 @@
-package com.gdeat.service.diagrams.dtos.storeDiagram
+package com.gdeat.domain.diagrams.utils
 
 /**
- * A Diagram Store Input DTO.
+ * A Diagram Information class.
  *
  * @property Entities an object with entities names and their attributes
  * @property Relations an object with the different relations between the entities
  */
-data class StoreDiagramInputDTO(
-    val name: String,
-    val prompt: String,
+data class DiagramInformation(
     val Entities: Map<String, List<String>>,
     val Relations: Map<String, Map<String, String>>
 )

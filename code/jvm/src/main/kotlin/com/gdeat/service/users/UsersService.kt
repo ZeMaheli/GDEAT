@@ -15,8 +15,6 @@ interface UsersService {
      * @param registerInputDTO the DTO with the data to create the user
      *
      * @return the JWT tokens for the new user
-     * @throws AlreadyExistsException if the user already exists
-     * @throws InvalidPasswordException if the password is invalid
      */
     fun register(registerInputDTO: RegisterInputDTO): RegisterOutputDTO
 
@@ -26,8 +24,6 @@ interface UsersService {
      * @param loginInputDTO the DTO with the data to log the user in
      *
      * @return the JWT tokens for the user
-     * @throws NotFoundException if the user does not exist
-     * @throws InvalidLoginException if the password is incorrect
      */
     fun login(loginInputDTO: LoginInputDTO): LoginOutputDTO
 
@@ -35,9 +31,6 @@ interface UsersService {
      * Logs a user out.
      *
      * @param tokenInputDTO the DTO with the tokens necessary to logout
-     *
-     * @throws NotFoundException if the refresh token does not exist or if it is expired
-     * @throws AuthenticationException if the refresh token is invalid
      */
     fun logout(tokenInputDTO: LogoutInputDTO)
 
@@ -47,9 +40,6 @@ interface UsersService {
      * @param tokenInputDTO the DTO with the tokens
      *
      * @return the new JWT token for the user
-     * @throws NotFoundException if the refresh token does not exist
-     * @throws RefreshTokenExpiredException if the refresh token is expired
-     * @throws AuthenticationException if the refresh token is invalid
      */
     fun refreshToken(tokenInputDTO: RefreshTokenInputDTO): RefreshTokenOutputDTO
 }

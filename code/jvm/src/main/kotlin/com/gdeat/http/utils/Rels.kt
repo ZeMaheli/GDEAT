@@ -14,6 +14,7 @@ object Rels {
 
     const val CREATE_DIAGRAM = "create-diagram"
     const val GET_DIAGRAM = "get-diagram"
-    const val EDIT_DIAGRAM = "edit-diagram"
+    const val STORE_DIAGRAM = "store-diagram"
     const val DELETE_DIAGRAM = "delete-diagram"
+    const val GET_DIAGRAMS = "get-diagrams"
 }

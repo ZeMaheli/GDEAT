@@ -10,6 +10,8 @@ import com.gdeat.service.diagrams.dtos.storeDiagram.StoreDiagramInputDTO
  * @property Relations an object with the different relations between the entities
  */
 data class StoreDiagramInputModel(
+    val name: String,
+    val prompt: String,
     val Entities: Map<String, List<String>>,
     val Relations: Map<String, Map<String, String>>
 ) {
@@ -19,6 +21,8 @@ data class StoreDiagramInputModel(
      * @return the service DTO
      */
     fun toDiagramStoreDTO() = StoreDiagramInputDTO(
+        name = name,
+        prompt = prompt,
         Entities = Entities,
         Relations = Relations
     )

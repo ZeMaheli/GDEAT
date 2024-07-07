@@ -4,11 +4,11 @@ import com.gdeat.service.diagrams.dtos.getDiagram.GetDiagramOutputDTO
 
 
 class GetDiagramOutputModel(
-    val diagramCode: String,
-    val diagramPDF: ByteArray
+    val Entities: Map<String, List<String>>,
+    val Relations: Map<String, Map<String, String>>
 ) {
     constructor(getDiagramOutputDTO: GetDiagramOutputDTO) : this(
-        diagramCode = getDiagramOutputDTO.diagramCode,
-        diagramPDF = getDiagramOutputDTO.diagramPDF
+        Entities = getDiagramOutputDTO.Entities,
+        Relations = getDiagramOutputDTO.Relations
     )
 }

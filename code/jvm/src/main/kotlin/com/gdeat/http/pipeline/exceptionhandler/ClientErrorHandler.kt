@@ -1,5 +1,6 @@
 package com.gdeat.http.pipeline.exceptionhandler
 
+import com.gdeat.domain.exceptions.InvalidDiagramException
 import com.gdeat.domain.exceptions.InvalidTokenException
 import com.gdeat.domain.exceptions.InvalidUserException
 import com.gdeat.http.media.error.JsonError
@@ -32,6 +33,7 @@ class ClientErrorHandler {
             InvalidLoginException::class,
             InvalidTokenException::class,
             InvalidUserException::class,
+            InvalidDiagramException::class
         ]
     )
     fun handleBadRequest(

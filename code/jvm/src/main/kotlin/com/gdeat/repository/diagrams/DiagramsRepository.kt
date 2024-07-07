@@ -14,10 +14,18 @@ interface DiagramsRepository : JpaRepository<Diagram, Long> {
     fun findByNameAndUser(name: String, user: User): Diagram?
 
     /**
-     * Checks if a diagram with the given name exists.
+     * Checks if a diagram with the given name exists for a certain user.
      *
      * @param name the name of the diagram to check
-     * @return true if a user with the given username exists, false otherwise
+     * @param user the user to check the diagrams
+     * @return true if a diagram with the given name exists, false otherwise
      */
-    fun existsByName(name: String): Boolean
+    fun existsByNameAndUser(name: String, user: User): Boolean
+
+    /**
+     * Returns all user diagrams
+     * @param user user to get diagrams from
+     * @return all user diagrams
+     */
+    fun findAllByUser(user: User): List<Diagram>
 }

@@ -16,9 +16,9 @@ object PathTemplate {
     // GRAPH
     const val CREATE_DIAGRAM = "/graphs/create"
     const val STORE_DIAGRAM = "/graphs/save"
-    const val GET_DIAGRAM = "/graphs/{id}"
+    const val GET_DIAGRAM = "/graphs/{name}"
     const val GET_DIAGRAMS = "/graphs"
-    const val DELETE_DIAGRAMS = "/graphs/{id}/delete"
+    const val DELETE_DIAGRAMS = "/graphs/{name}/delete"
 
     // URI's
     fun home() = URI(HOME)

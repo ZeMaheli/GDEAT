@@ -1,6 +1,9 @@
 package com.gdeat.service.diagrams
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.gdeat.domain.diagrams.Diagram
+import com.gdeat.domain.diagrams.utils.DiagramInformation
+import com.gdeat.domain.users.User
 import com.gdeat.repository.diagrams.DiagramsRepository
 import com.gdeat.repository.users.RevokedAccessTokenRepository
 import com.gdeat.repository.users.UsersRepository
@@ -11,6 +14,8 @@ import com.gdeat.service.diagrams.dtos.deleteDiagram.DeleteDiagramOutputDTO
 import com.gdeat.service.diagrams.dtos.getDiagram.GetDiagramOutputDTO
 import com.gdeat.service.diagrams.dtos.getDiagrams.GetDiagramsOutputDTO
 import com.gdeat.service.diagrams.dtos.storeDiagram.StoreDiagramInputDTO
+import com.gdeat.service.exceptions.AlreadyExistsException
+import com.gdeat.service.exceptions.NotFoundException
 import com.gdeat.service.utils.SecurityConfig
 import com.gdeat.utils.JWTProvider
 import externalaiservice.ai.AIServiceImpl
@@ -36,27 +41,60 @@ class DiagramsServiceImpl(
         hashingUtils
     ) {
 
-    override suspend fun createGraph(diagramCreateInputDTO: DiagramCreateInputDTO): DiagramCreateOutputDTO {
-        return aiService.generateEntitiesAndRelations(diagramCreateInputDTO.toAIRequest()).response.fromJsonToEntityRelationDiagramInfo()
+    override suspend fun createDiagram(diagramCreateInputDTO: DiagramCreateInputDTO): DiagramCreateOutputDTO {
+        return aiService.generateEntitiesAndRelations(diagramCreateInputDTO.toAIRequest()).response.toDiagramInfo()
     }
 
-    override fun storeDiagram(storeDiagramInputDTO: StoreDiagramInputDTO) {
-        TODO("Not yet implemented")
+    override fun storeDiagram(token: String, storeDiagramInputDTO: StoreDiagramInputDTO) {
+        val user = authenticateUser(token)
+        val diagramName = storeDiagramInputDTO.name
+        if (diagramsRepository.existsByNameAndUser(diagramName, user)) throw AlreadyExistsException("Diagram with name $diagramName already exists")
+        diagramsRepository.save(
+            Diagram(
+                storeDiagramInputDTO.name,
+                user,
+                storeDiagramInputDTO.prompt,
+                DiagramInformation(storeDiagramInputDTO.Entities, storeDiagramInputDTO.Relations)
+            )
+        )
     }
 
-    override fun getDiagram(): GetDiagramOutputDTO {
-        TODO("Not yet implemented")
+    override fun getDiagram(token: String, name: String): GetDiagramOutputDTO {
+        val user = authenticateUser(token)
+        val diagram = findDiagramByNameAndUser(name, user)
+        return GetDiagramOutputDTO(diagram.data)
     }
 
-    override fun deleteDiagram(): DeleteDiagramOutputDTO {
-        TODO("Not yet implemented")
+    override fun deleteDiagram(token: String, name: String): DeleteDiagramOutputDTO {
+        val user = authenticateUser(token)
+        val diagram = findDiagramByNameAndUser(name, user)
+        diagramsRepository.delete(diagram)
+        return DeleteDiagramOutputDTO(diagram.name)
     }
 
-    override fun getDiagrams(): GetDiagramsOutputDTO {
-        TODO("Not yet implemented")
+    override fun getDiagrams(token: String): GetDiagramsOutputDTO {
+        val user = authenticateUser(token)
+        val diagrams = diagramsRepository.findAllByUser(user).map { diagram -> diagram.name }
+        return GetDiagramsOutputDTO(diagrams)
     }
 
-    private fun String.fromJsonToEntityRelationDiagramInfo(): DiagramCreateOutputDTO {
+    /**
+     * Finds an user diagram by its name
+     *
+     * @param name The name of the diagram
+     * @param user User information
+     *
+     * @return The diagram of the user
+     * @throws NotFoundException If diagram is not found
+     */
+    private fun findDiagramByNameAndUser(name: String, user: User): Diagram =
+        diagramsRepository.findByNameAndUser(name, user)
+            ?: throw NotFoundException("Diagram with name $name not found")
+
+    /**
+     * Returns a DiagramCreateOutputDTO representation of the string.
+     */
+    private fun String.toDiagramInfo(): DiagramCreateOutputDTO {
         return try {
             objectMapper.readValue(this, DiagramCreateOutputDTO::class.java)
         } catch (ex: Exception) {

@@ -1,12 +1,10 @@
 package com.gdeat.domain.diagrams
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.gdeat.domain.diagrams.utils.DiagramCreateOutputDTOConverter
+import com.gdeat.domain.diagrams.utils.DiagramInformation
 import com.gdeat.domain.exceptions.InvalidDiagramException
 import com.gdeat.domain.exceptions.InvalidUserException
 import com.gdeat.domain.users.User
-import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateOutputDTO
 import jakarta.persistence.*
 
 
@@ -30,24 +28,24 @@ class Diagram {
 
     @Column(name = "data", nullable = false, columnDefinition = "jsonb")
     @Convert(converter = DiagramCreateOutputDTOConverter::class)
-    val data: DiagramCreateOutputDTO
+    val data: DiagramInformation
 
     constructor(
         name: String,
         user: User,
         prompt: String,
-        data: DiagramCreateOutputDTO
+        data: DiagramInformation
     ) {
 
         if (name.length !in MIN_NAME_LENGTH..MAX_NAME_LENGTH) {
             throw InvalidUserException("Invalid username length. Please provide username length between $MIN_NAME_LENGTH..$MAX_NAME_LENGTH.")
         }
 
-        if(prompt.isBlank()){
+        if (prompt.isBlank()) {
             throw InvalidDiagramException("Please provide a non empty prompt.")
         }
 
-        if(data.Entities.isEmpty() || data.Relations.isEmpty()){
+        if (data.Entities.isEmpty() || data.Relations.isEmpty()) {
             throw InvalidDiagramException("Please provide a non empty data object.")
         }
 
@@ -60,19 +58,5 @@ class Diagram {
     companion object {
         private const val MIN_NAME_LENGTH = 3
         private const val MAX_NAME_LENGTH = 64
-    }
-}
-
-@Converter
-class DiagramCreateOutputDTOConverter : AttributeConverter<DiagramCreateOutputDTO, String> {
-
-    private val objectMapper: ObjectMapper = jacksonObjectMapper()
-
-    override fun convertToDatabaseColumn(attribute: DiagramCreateOutputDTO?): String {
-        return objectMapper.writeValueAsString(attribute)
-    }
-
-    override fun convertToEntityAttribute(dbData: String?): DiagramCreateOutputDTO {
-        return objectMapper.readValue(dbData ?: "{}")
     }
 }
