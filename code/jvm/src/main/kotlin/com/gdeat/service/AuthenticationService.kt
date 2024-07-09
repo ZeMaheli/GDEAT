@@ -1,12 +1,12 @@
 package com.gdeat.service
 
 import com.gdeat.domain.users.User
-import com.gdeat.repository.users.RevokedAccessTokenRepository
+import com.gdeat.repository.tokens.RevokedAccessTokenRepository
 import com.gdeat.repository.users.UsersRepository
 import com.gdeat.service.exceptions.AuthenticationException
 import com.gdeat.service.exceptions.NotFoundException
-import com.gdeat.service.utils.SecurityConfig
-import com.gdeat.utils.JWTProvider
+import com.gdeat.security.SecurityConfig
+import com.gdeat.security.JWTProvider
 import org.springframework.stereotype.Service
 
 /**

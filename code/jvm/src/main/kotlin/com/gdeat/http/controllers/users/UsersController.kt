@@ -5,21 +5,24 @@ import com.gdeat.http.controllers.users.models.login.LoginOutputModel
 import com.gdeat.http.controllers.users.models.refreshToken.RefreshTokenOutputModel
 import com.gdeat.http.controllers.users.models.register.RegisterInputModel
 import com.gdeat.http.controllers.users.models.register.RegisterOutputModel
-import com.gdeat.http.media.siren.Link
-import com.gdeat.http.media.siren.SirenEntity
 import com.gdeat.http.pipeline.authentication.RequiresAuthentication
 import com.gdeat.http.utils.PathTemplate
 import com.gdeat.http.utils.Rels
+import com.gdeat.security.JWTProvider
 import com.gdeat.service.users.UsersService
 import com.gdeat.service.users.dtos.logout.LogoutInputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenInputDTO
-import com.gdeat.utils.JWTProvider
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestAttribute
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
+import sirenentity.siren.Link
+import sirenentity.siren.SirenEntity
 import java.time.Duration
 
 /**
@@ -43,7 +46,9 @@ class UsersController(private val usersServices: UsersService) {
         response: HttpServletResponse
     ): ResponseEntity<SirenEntity<RegisterOutputModel>> {
         val userRegistryDTO = usersServices.register(userData.toRegisterInputDTO())
+
         setTokenCookies(response, userRegistryDTO.accessToken, userRegistryDTO.refreshToken)
+
         val registerOutputEntity = SirenEntity(
             `class` = listOf(Rels.REGISTER),
             properties = RegisterOutputModel(userRegistryDTO),
@@ -124,7 +129,7 @@ class UsersController(private val usersServices: UsersService) {
         @RequestAttribute(JWTProvider.REFRESH_TOKEN_ATTRIBUTE, required = false) accessToken: String,
         response: HttpServletResponse
     ): ResponseEntity<SirenEntity<RefreshTokenOutputModel>> {
-        val refreshTokenDTO = usersServices.refreshToken(RefreshTokenInputDTO(refreshToken,accessToken))
+        val refreshTokenDTO = usersServices.refreshToken(RefreshTokenInputDTO(refreshToken, accessToken))
 
         setTokenCookies(response, refreshTokenDTO.accessToken, refreshTokenDTO.refreshToken)
 

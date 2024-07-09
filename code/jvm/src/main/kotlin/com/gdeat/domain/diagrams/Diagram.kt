@@ -1,7 +1,7 @@
 package com.gdeat.domain.diagrams
 
-import com.gdeat.domain.diagrams.utils.DiagramCreateOutputDTOConverter
 import com.gdeat.domain.diagrams.utils.DiagramInformation
+import com.gdeat.domain.diagrams.utils.DiagramInformationConverter
 import com.gdeat.domain.exceptions.InvalidDiagramException
 import com.gdeat.domain.exceptions.InvalidUserException
 import com.gdeat.domain.users.User
@@ -9,12 +9,12 @@ import jakarta.persistence.*
 
 
 @Entity
-@Table(name = "diagrams", uniqueConstraints = [UniqueConstraint(columnNames = ["name", "user"])])
+@Table(name = "diagrams", uniqueConstraints = [UniqueConstraint(columnNames = ["name", "user_id"])])
 class Diagram {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long = 0
+    private var id: Long = 0
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -23,11 +23,11 @@ class Diagram {
     @Column(name = "name", nullable = false, length = MAX_NAME_LENGTH)
     val name: String
 
-    @Column(name = "name", nullable = false, length = MAX_NAME_LENGTH)
+    @Column(name = "prompt", nullable = false, columnDefinition = "TEXT", length = MAX_NAME_LENGTH)
     val prompt: String
 
-    @Column(name = "data", nullable = false, columnDefinition = "jsonb")
-    @Convert(converter = DiagramCreateOutputDTOConverter::class)
+    @Convert(converter = DiagramInformationConverter::class)
+    @Column(name = "data", nullable = false, columnDefinition = "TEXT")
     val data: DiagramInformation
 
     constructor(
@@ -45,7 +45,7 @@ class Diagram {
             throw InvalidDiagramException("Please provide a non empty prompt.")
         }
 
-        if (data.Entities.isEmpty() || data.Relations.isEmpty()) {
+        if (data.Entities.isEmpty() || data.Entities.isEmpty()) {
             throw InvalidDiagramException("Please provide a non empty data object.")
         }
 

@@ -1,6 +1,6 @@
 package com.gdeat.service.diagrams.dtos.createDiagram
 
-import externalaiservice.ai.config.models.AIRequest
+import com.gdeat.service.diagrams.aiserver.AIServerRequest
 
 /**
  * A Diagram Creation Input DTO.
@@ -9,10 +9,6 @@ import externalaiservice.ai.config.models.AIRequest
  */
 data class DiagramCreateInputDTO(
     val prompt: String
-) {
-    fun toAIRequest(): AIRequest {
-        return AIRequest(
-            prompt = this.prompt
-        )
-    }
+){
+    fun toAiServerRequest() = AIServerRequest(prompt)
 }

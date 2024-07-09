@@ -5,12 +5,12 @@ import java.sql.Timestamp
 import com.gdeat.domain.exceptions.InvalidTokenException
 
 @Entity
-@Table(name = "refresh_tokens", uniqueConstraints = [UniqueConstraint(columnNames = ["user", "tokenHash"])])
+@Table(name = "refresh_tokens", uniqueConstraints = [UniqueConstraint(columnNames = ["user_id", "token_hash"])])
 class RefreshToken {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long = 0
+    private var id: Long = 0
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

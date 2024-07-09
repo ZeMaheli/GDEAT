@@ -3,7 +3,6 @@ package com.gdeat
 import com.gdeat.http.pipeline.authentication.AuthInterceptor
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
  * @property authInterceptor the authentication interceptor
  */
 @SpringBootApplication
-@ComponentScan(basePackages = ["com.gdeat", "externalaiservice.ai"])
 class GdeatApplication(
     val authInterceptor: AuthInterceptor
 ) : WebMvcConfigurer {

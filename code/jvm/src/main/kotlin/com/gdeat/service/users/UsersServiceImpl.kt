@@ -3,8 +3,8 @@ package com.gdeat.service.users
 import com.gdeat.domain.users.RefreshToken
 import com.gdeat.domain.users.RevokedAccessToken
 import com.gdeat.domain.users.User
-import com.gdeat.repository.users.RefreshTokensRepository
-import com.gdeat.repository.users.RevokedAccessTokenRepository
+import com.gdeat.repository.tokens.RefreshTokensRepository
+import com.gdeat.repository.tokens.RevokedAccessTokenRepository
 import com.gdeat.repository.users.UsersRepository
 import com.gdeat.service.exceptions.*
 import com.gdeat.service.users.dtos.login.LoginInputDTO
@@ -14,9 +14,9 @@ import com.gdeat.service.users.dtos.register.RegisterInputDTO
 import com.gdeat.service.users.dtos.register.RegisterOutputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenInputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenOutputDTO
-import com.gdeat.service.utils.SecurityConfig
-import com.gdeat.utils.JWTProvider
-import com.gdeat.utils.ServerConfiguration
+import com.gdeat.security.SecurityConfig
+import com.gdeat.security.JWTProvider
+import com.gdeat.config.ServerConfiguration
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp

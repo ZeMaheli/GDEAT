@@ -1,12 +1,12 @@
 package com.gdeat.http.pipeline.exceptionhandler
 
-import com.gdeat.http.media.error.JsonError
-import externalaiservice.exceptions.AIServiceException
+import com.gdeat.service.exceptions.AIServerException
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import sirenentity.error.JsonError
 
 @ControllerAdvice
 class ServerErrorHandler {
@@ -21,7 +21,7 @@ class ServerErrorHandler {
     @ExceptionHandler(
         value = [
             Exception::class,
-            AIServiceException::class
+            AIServerException::class
         ]
     )
     fun handleUncaughtExceptions(
@@ -32,5 +32,6 @@ class ServerErrorHandler {
             code = HttpStatus.INTERNAL_SERVER_ERROR.value(),
             message = "Internal Server Error",
             details = ex.message
-        ).toResponse(HttpStatus.INTERNAL_SERVER_ERROR)
+        )
+            .toResponse(HttpStatus.INTERNAL_SERVER_ERROR)
 }

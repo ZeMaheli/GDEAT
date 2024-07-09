@@ -6,15 +6,15 @@ import com.gdeat.http.controllers.diagrams.models.deleteDiagram.DeleteDiagramOut
 import com.gdeat.http.controllers.diagrams.models.getDiagram.GetDiagramOutputModel
 import com.gdeat.http.controllers.diagrams.models.getDiagrams.GetDiagramsOutputModel
 import com.gdeat.http.controllers.diagrams.models.storeDiagram.StoreDiagramInputModel
-import com.gdeat.http.media.siren.Link
-import com.gdeat.http.media.siren.SirenEntity
 import com.gdeat.http.utils.PathTemplate
 import com.gdeat.http.utils.Rels
+import com.gdeat.security.JWTProvider.Companion.ACCESS_TOKEN_ATTRIBUTE
 import com.gdeat.service.diagrams.DiagramsService
-import com.gdeat.utils.JWTProvider.Companion.ACCESS_TOKEN_ATTRIBUTE
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import sirenentity.siren.Link
+import sirenentity.siren.SirenEntity
 
 @RestController
 class DiagramController(private val diagramServices: DiagramsService) {

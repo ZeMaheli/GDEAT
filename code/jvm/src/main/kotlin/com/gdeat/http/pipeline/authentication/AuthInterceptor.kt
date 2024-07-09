@@ -1,7 +1,7 @@
 package com.gdeat.http.pipeline.authentication
 
 import com.gdeat.service.exceptions.AuthenticationException
-import com.gdeat.utils.JWTProvider
+import com.gdeat.security.JWTProvider
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Component

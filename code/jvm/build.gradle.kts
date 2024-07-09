@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "3.2.4"
-    id("io.spring.dependency-management") version "1.1.1"
+    id("org.springframework.boot") version "3.3.1"
+    id("io.spring.dependency-management") version "1.1.5"
     id("org.jetbrains.kotlin.plugin.jpa") version "1.9.20"
-    kotlin("jvm") version "1.8.22"
-    kotlin("plugin.spring") version "1.5.31"
+    kotlin("jvm") version "1.9.24"
+    kotlin("plugin.spring") version "1.9.24"
 }
 
 group = "com"
@@ -29,7 +29,6 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.postgresql:postgresql:42.7.3")
-    implementation("com.vladmihalcea:hibernate-types-52:2.21.1")
 
     implementation("org.springframework.security:spring-security-crypto")
 
@@ -37,13 +36,13 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:0.12.5")
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.5")
 
-    implementation("guru.nidi:graphviz-java:0.18.1")
-
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
-    implementation(files("../externalAIService/lib/build/libs/lib-plain.jar"))
+    implementation(files("../sirenEntityLib/lib/build/libs/lib-plain.jar"))
+
+    implementation ("com.google.code.gson:gson:2.8.8")
 }
 
 tasks.withType<KotlinCompile> {

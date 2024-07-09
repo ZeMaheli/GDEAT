@@ -13,7 +13,7 @@ import jakarta.persistence.*
  * @property expirationDate the token's expiration date
  */
 @Entity
-@Table(name = "revoked_access_tokens", uniqueConstraints = [UniqueConstraint(columnNames = ["user", "tokenHash"])])
+@Table(name = "revoked_access_tokens", uniqueConstraints = [UniqueConstraint(columnNames = ["user_id", "token_hash"])])
 class RevokedAccessToken {
     @Id
     @Column(name = "id")

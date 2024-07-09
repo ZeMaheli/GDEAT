@@ -1,11 +1,12 @@
 package com.gdeat.utils
 
-import com.gdeat.utils.JWTProvider.JwtPayload
+import com.gdeat.config.ServerConfiguration
+import com.gdeat.security.JWTProvider
+import com.gdeat.security.JWTProvider.JwtPayload
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.SignatureException
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.function.Executable
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.sql.Timestamp

@@ -1,33 +1,39 @@
 package com.gdeat.service.diagrams
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.gdeat.config.AIServerConfig
 import com.gdeat.domain.diagrams.Diagram
 import com.gdeat.domain.diagrams.utils.DiagramInformation
 import com.gdeat.domain.users.User
 import com.gdeat.repository.diagrams.DiagramsRepository
-import com.gdeat.repository.users.RevokedAccessTokenRepository
+import com.gdeat.repository.tokens.RevokedAccessTokenRepository
 import com.gdeat.repository.users.UsersRepository
+import com.gdeat.security.JWTProvider
+import com.gdeat.security.SecurityConfig
 import com.gdeat.service.AuthenticationService
+import com.gdeat.service.diagrams.aiserver.AIServerResponse
 import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateInputDTO
 import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateOutputDTO
 import com.gdeat.service.diagrams.dtos.deleteDiagram.DeleteDiagramOutputDTO
 import com.gdeat.service.diagrams.dtos.getDiagram.GetDiagramOutputDTO
 import com.gdeat.service.diagrams.dtos.getDiagrams.GetDiagramsOutputDTO
 import com.gdeat.service.diagrams.dtos.storeDiagram.StoreDiagramInputDTO
+import com.gdeat.service.exceptions.AIServerException
 import com.gdeat.service.exceptions.AlreadyExistsException
 import com.gdeat.service.exceptions.NotFoundException
-import com.gdeat.service.utils.SecurityConfig
-import com.gdeat.utils.JWTProvider
-import externalaiservice.ai.AIServiceImpl
-import externalaiservice.exceptions.AIServiceException
+import com.google.gson.Gson
+import kotlinx.coroutines.reactive.awaitFirst
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientRequestException
+import sirenentity.siren.SirenEntity
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
 class DiagramsServiceImpl(
-    private val aiService: AIServiceImpl,
-    private val objectMapper: ObjectMapper,
+    private val aiServerConfig: AIServerConfig,
+    private val gson: Gson,
+    private val webClient: WebClient,
     private val diagramsRepository: DiagramsRepository,
     usersRepository: UsersRepository,
     revokedAccessTokenRepository: RevokedAccessTokenRepository,
@@ -42,13 +48,34 @@ class DiagramsServiceImpl(
     ) {
 
     override suspend fun createDiagram(diagramCreateInputDTO: DiagramCreateInputDTO): DiagramCreateOutputDTO {
-        return aiService.generateEntitiesAndRelations(diagramCreateInputDTO.toAIRequest()).response.toDiagramInfo()
+        try {
+            val res = webClient
+                .post()
+                .uri(aiServerConfig.endpoints.process)
+                .bodyValue(diagramCreateInputDTO.toAiServerRequest())
+                .retrieve()
+                .bodyToMono(SirenEntity::class.java)
+                .awaitFirst()
+            val prop = res.properties.toString()
+
+            return prop.toDiagramInfo()
+        } catch (ex: WebClientRequestException) {
+            throw AIServerException("Unable to communicate with AI server. Possibly down")
+        } catch (ex: Exception) {
+            println(ex)
+            throw AIServerException("Unable to communicate with AI server. Possibly down")
+        }
     }
+
 
     override fun storeDiagram(token: String, storeDiagramInputDTO: StoreDiagramInputDTO) {
         val user = authenticateUser(token)
         val diagramName = storeDiagramInputDTO.name
-        if (diagramsRepository.existsByNameAndUser(diagramName, user)) throw AlreadyExistsException("Diagram with name $diagramName already exists")
+        if (diagramsRepository.existsByNameAndUser(
+                diagramName,
+                user
+            )
+        ) throw AlreadyExistsException("Diagram with name $diagramName already exists")
         diagramsRepository.save(
             Diagram(
                 storeDiagramInputDTO.name,
@@ -79,7 +106,7 @@ class DiagramsServiceImpl(
     }
 
     /**
-     * Finds an user diagram by its name
+     * Finds a user diagram by its name
      *
      * @param name The name of the diagram
      * @param user User information
@@ -96,9 +123,9 @@ class DiagramsServiceImpl(
      */
     private fun String.toDiagramInfo(): DiagramCreateOutputDTO {
         return try {
-            objectMapper.readValue(this, DiagramCreateOutputDTO::class.java)
+            gson.fromJson(this, AIServerResponse::class.java).response
         } catch (ex: Exception) {
-            throw AIServiceException("Invalid JSON response from LLM: $this")
+            throw AIServerException("Invalid JSON response from LLM: $this")
         }
     }
 }
