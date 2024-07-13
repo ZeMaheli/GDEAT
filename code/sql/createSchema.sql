@@ -1,11 +1,11 @@
-create table users(
+create table IF NOT EXISTS users(
     id                  serial primary key,
     username            VARCHAR(64) unique  not null,
     password_hash       VARCHAR(60)        not null,
     email               VARCHAR(128) unique not null
 );
 
-create table refresh_tokens
+create table IF NOT EXISTS refresh_tokens
 (
     id              SERIAL PRIMARY KEY,
     token_hash VARCHAR(60) NOT NULL,
@@ -15,7 +15,7 @@ create table refresh_tokens
     UNIQUE (user_id, token_hash)
 );
 
-CREATE TABLE revoked_access_tokens
+CREATE TABLE  IF NOT EXISTS revoked_access_tokens
 (
     id              SERIAL PRIMARY KEY,
     user_id         INT           NOT NULL REFERENCES users (id),
@@ -25,7 +25,7 @@ CREATE TABLE revoked_access_tokens
     UNIQUE (user_id, token_hash)
 );
 
-create table diagrams(
+create table  IF NOT EXISTS diagrams(
     id                  serial primary key,
     user_id         INT           NOT NULL REFERENCES users (id),
     name                VARCHAR(64) not null,

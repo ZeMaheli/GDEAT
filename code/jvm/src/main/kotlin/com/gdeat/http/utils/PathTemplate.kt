@@ -30,6 +30,6 @@ object PathTemplate {
     fun diagramCreate() = URI(CREATE_DIAGRAM)
     fun diagramsStore() = URI(STORE_DIAGRAM)
     fun diagramsGet() = URI(GET_DIAGRAMS)
-    fun diagramDelete() = URI(DELETE_DIAGRAMS)
-    fun diagramGet() = URI(GET_DIAGRAM)
+    fun diagramDelete(name:String) = URI(DELETE_DIAGRAMS.replace("{name}",name))
+    fun diagramGet(name:String) = URI(GET_DIAGRAM.replace("{name}",name))
 }

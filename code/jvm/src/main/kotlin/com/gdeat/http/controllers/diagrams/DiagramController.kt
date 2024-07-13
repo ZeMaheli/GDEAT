@@ -84,7 +84,7 @@ class DiagramController(private val diagramServices: DiagramsService) {
             `class` = listOf(Rels.GET_DIAGRAM),
             properties = GetDiagramOutputModel(diagramInfo),
             links = listOf(
-                Link(rel = listOf(Rels.GET_DIAGRAM), href = PathTemplate.diagramsGet())
+                Link(rel = listOf(Rels.GET_DIAGRAM), href = PathTemplate.diagramGet(name))
             ),
         )
 
@@ -109,7 +109,7 @@ class DiagramController(private val diagramServices: DiagramsService) {
             `class` = listOf(Rels.DELETE_DIAGRAM),
             properties = DeleteDiagramOutputModel(deletedDiagramInfo),
             links = listOf(
-                Link(rel = listOf(Rels.DELETE_DIAGRAM), href = PathTemplate.diagramDelete())
+                Link(rel = listOf(Rels.DELETE_DIAGRAM), href = PathTemplate.diagramDelete(name))
             ),
         )
 
@@ -126,7 +126,6 @@ class DiagramController(private val diagramServices: DiagramsService) {
         @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
     ): ResponseEntity<SirenEntity<GetDiagramsOutputModel>> {
         val diagrams = diagramServices.getDiagrams(token)
-
         val getDiagramEntity = SirenEntity(
             `class` = listOf(Rels.GET_DIAGRAMS),
             properties = GetDiagramsOutputModel(diagrams),
