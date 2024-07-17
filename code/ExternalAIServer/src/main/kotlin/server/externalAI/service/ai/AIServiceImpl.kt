@@ -1,10 +1,10 @@
 package server.externalAI.service.ai
 
-import externalaiservice.ai.config.models.AIResponse
+import server.externalAI.service.ai.models.AIResponse
 import kotlinx.coroutines.reactive.awaitFirst
 import org.springframework.stereotype.Service
 import server.externalAI.config.ExternalAIApiConfig
-import externalaiservice.ai.config.models.AIRequest
+import server.externalAI.service.ai.models.AIRequest
 import org.springframework.web.reactive.function.client.WebClient
 import server.externalAI.service.exceptions.AIServiceException
 

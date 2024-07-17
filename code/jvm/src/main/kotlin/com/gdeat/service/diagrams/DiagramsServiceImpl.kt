@@ -1,5 +1,8 @@
 package com.gdeat.service.diagrams
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.gdeat.config.AIServerConfig
 import com.gdeat.domain.diagrams.Diagram
 import com.gdeat.domain.diagrams.utils.DiagramInformation
@@ -8,7 +11,7 @@ import com.gdeat.repository.diagrams.DiagramsRepository
 import com.gdeat.repository.tokens.RevokedAccessTokenRepository
 import com.gdeat.repository.users.UsersRepository
 import com.gdeat.security.JWTProvider
-import com.gdeat.security.SecurityConfig
+import com.gdeat.config.SecurityConfig
 import com.gdeat.service.AuthenticationService
 import com.gdeat.service.diagrams.aiserver.AIServerResponse
 import com.gdeat.service.diagrams.dtos.createDiagram.DiagramCreateInputDTO
@@ -49,21 +52,34 @@ class DiagramsServiceImpl(
 
     override suspend fun createDiagram(diagramCreateInputDTO: DiagramCreateInputDTO): DiagramCreateOutputDTO {
         try {
-            val res = webClient
+            val sirenEntityRes = webClient
                 .post()
                 .uri(aiServerConfig.endpoints.process)
                 .bodyValue(diagramCreateInputDTO.toAiServerRequest())
                 .retrieve()
                 .bodyToMono(SirenEntity::class.java)
                 .awaitFirst()
-            val prop = res.properties.toString()
+            // Ensure res is not null and properties is a LinkedHashMap
+            val properties = sirenEntityRes?.properties as? LinkedHashMap<*, *> ?: throw AIServerException("Properties not found in response or not of expected type")
 
-            return prop.toDiagramInfo()
+            // Extract response JSON string
+            val responseJson = properties["response"] as? String ?: throw AIServerException("Response JSON not found in properties")
+
+            // Deserialize response JSON string into SomeClass using Jackson ObjectMapper
+            val someClass = jacksonObjectMapper().readValue(responseJson, DiagramCreateOutputDTO::class.java)
+
+            // Create DiagramCreateOutputDTO from SomeClass
+            val diagramOutputDTO = DiagramCreateOutputDTO(
+                Entities = someClass.Entities,
+                Relations = someClass.Relations
+            )
+
+            return diagramOutputDTO
         } catch (ex: WebClientRequestException) {
             throw AIServerException("Unable to communicate with AI server. Possibly down")
         } catch (ex: Exception) {
             println(ex)
-            throw AIServerException("Unable to communicate with AI server. Possibly down")
+            throw AIServerException("Exception")
         }
     }
 
@@ -118,14 +134,14 @@ class DiagramsServiceImpl(
         diagramsRepository.findByNameAndUser(name, user)
             ?: throw NotFoundException("Diagram with name $name not found")
 
-    /**
+/*    *//**
      * Returns a DiagramCreateOutputDTO representation of the string.
-     */
+     *//*
     private fun String.toDiagramInfo(): DiagramCreateOutputDTO {
         return try {
             gson.fromJson(this, AIServerResponse::class.java).response
         } catch (ex: Exception) {
             throw AIServerException("Invalid JSON response from LLM: $this")
         }
-    }
+    }*/
 }

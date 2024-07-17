@@ -86,7 +86,6 @@ class JWTProvider(serverConfig: ServerConfiguration) {
      * @return the JWT token
      */
     fun createRefreshToken(jwtPayload: JwtPayload): RefreshTokenDetails {
-        println("createRefreshToken Working")
         val issuedAt = Instant.now()
         val expirationDate = issuedAt.plus(refreshTokenDuration)
 

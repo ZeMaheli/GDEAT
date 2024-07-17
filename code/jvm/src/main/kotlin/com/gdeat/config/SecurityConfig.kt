@@ -1,4 +1,4 @@
-package com.gdeat.security
+package com.gdeat.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

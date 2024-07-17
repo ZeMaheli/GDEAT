@@ -28,7 +28,7 @@ export default function App() {
     return (
         <div className="App">
             <NavBar/>
-            <div className="App-content">
+            <div className="App-content" style={{ paddingTop: '64px', display: 'grid', gridTemplateColumns: '1fr 1fr', gridGap: '16px' }}>
                 <Routes>
                     {routes.map((route, index) =>
                         (route.AuthRequired)

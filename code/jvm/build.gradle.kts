@@ -42,7 +42,7 @@ dependencies {
 
     implementation(files("../sirenEntityLib/lib/build/libs/lib-plain.jar"))
 
-    implementation ("com.google.code.gson:gson:2.8.8")
+    implementation ("com.google.code.gson:gson:2.10")
 }
 
 tasks.withType<KotlinCompile> {

@@ -124,6 +124,7 @@ class UsersController(private val usersServices: UsersService) {
      * @return ResponseEntity with the appropriate status and/or the new user tokens.
      */
     @PostMapping(PathTemplate.REFRESH_TOKEN)
+    @RequiresAuthentication
     fun refreshToken(
         @RequestAttribute(JWTProvider.ACCESS_TOKEN_ATTRIBUTE, required = true) refreshToken: String,
         @RequestAttribute(JWTProvider.REFRESH_TOKEN_ATTRIBUTE, required = false) accessToken: String,

@@ -14,7 +14,7 @@ import com.gdeat.service.users.dtos.register.RegisterInputDTO
 import com.gdeat.service.users.dtos.register.RegisterOutputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenInputDTO
 import com.gdeat.service.users.dtos.token.RefreshTokenOutputDTO
-import com.gdeat.security.SecurityConfig
+import com.gdeat.config.SecurityConfig
 import com.gdeat.security.JWTProvider
 import com.gdeat.config.ServerConfiguration
 import org.springframework.stereotype.Service

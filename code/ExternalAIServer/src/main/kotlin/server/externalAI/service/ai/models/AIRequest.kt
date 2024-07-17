@@ -1,4 +1,4 @@
-package externalaiservice.ai.config.models
+package server.externalAI.service.ai.models
 
 /**
  * A data class representing a request to an AI model using ollama platform.

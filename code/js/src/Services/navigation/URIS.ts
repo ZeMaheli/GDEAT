@@ -11,10 +11,10 @@ export const GET_ID_BY_TOKEN = URI_PREFIX + "user/token";
 export const GET_USER_BY_ID = URI_PREFIX + "user/";
 
 //Graph
-export const CREATE_DIAGRAM = URI_PREFIX + "graphs/create";
-export const EDIT_DIAGRAM = URI_PREFIX + "graphs/edit";
-export const DELETE_DIAGRAM = URI_PREFIX + "graphs/delete";
-export const DIAGRAM_LIST = URI_PREFIX + "graphs";
-export const SAVE_DIAGRAM = URI_PREFIX + "graphs/save";
+export const CREATE_DIAGRAM = URI_PREFIX + "diagrams/create";
+export const EDIT_DIAGRAM = URI_PREFIX + "diagrams/edit";
+export const DELETE_DIAGRAM = URI_PREFIX + "diagrams/delete";
+export const DIAGRAM_LIST = URI_PREFIX + "diagrams";
+export const SAVE_DIAGRAM = URI_PREFIX + "diagrams/save";
 
 

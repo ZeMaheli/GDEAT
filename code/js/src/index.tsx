@@ -11,6 +11,7 @@ if (!container) {
 }
 
 const root = createRoot(container);
+
 root.render(
     <Router>
         <Auth>

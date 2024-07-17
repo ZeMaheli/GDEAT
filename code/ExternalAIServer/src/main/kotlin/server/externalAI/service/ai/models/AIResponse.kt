@@ -1,4 +1,4 @@
-package externalaiservice.ai.config.models
+package server.externalAI.service.ai.models
 
 /**
  * A data class representing the response from an AI model.

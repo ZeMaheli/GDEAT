@@ -1,6 +1,6 @@
 package server.externalAI.http.controllers.ai.models.processRequest
 
-import externalaiservice.ai.config.models.AIRequest
+import server.externalAI.service.ai.models.AIRequest
 
 data class ProcessRequestInputModel(
     val prompt: String

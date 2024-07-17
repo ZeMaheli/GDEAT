@@ -6,6 +6,7 @@ import com.gdeat.http.controllers.diagrams.models.deleteDiagram.DeleteDiagramOut
 import com.gdeat.http.controllers.diagrams.models.getDiagram.GetDiagramOutputModel
 import com.gdeat.http.controllers.diagrams.models.getDiagrams.GetDiagramsOutputModel
 import com.gdeat.http.controllers.diagrams.models.storeDiagram.StoreDiagramInputModel
+import com.gdeat.http.pipeline.authentication.RequiresAuthentication
 import com.gdeat.http.utils.PathTemplate
 import com.gdeat.http.utils.Rels
 import com.gdeat.security.JWTProvider.Companion.ACCESS_TOKEN_ATTRIBUTE
@@ -49,6 +50,7 @@ class DiagramController(private val diagramServices: DiagramsService) {
      * @return ResponseEntity with the appropriate status and/or the existing diagram.
      */
     @PostMapping(PathTemplate.STORE_DIAGRAM)
+    @RequiresAuthentication
     fun saveDiagram(
         @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
         @RequestBody diagramData: StoreDiagramInputModel
@@ -74,6 +76,7 @@ class DiagramController(private val diagramServices: DiagramsService) {
      * @return ResponseEntity with the appropriate status and/or the existing diagram.
      */
     @GetMapping(PathTemplate.GET_DIAGRAM)
+    @RequiresAuthentication
     fun getDiagram(
         @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
         @PathVariable name: String
@@ -99,6 +102,7 @@ class DiagramController(private val diagramServices: DiagramsService) {
      * @return ResponseEntity with the appropriate status and/or the deleted diagram.
      */
     @DeleteMapping(PathTemplate.DELETE_DIAGRAMS)
+    @RequiresAuthentication
     fun deleteDiagram(
         @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
         @PathVariable name: String
@@ -122,6 +126,7 @@ class DiagramController(private val diagramServices: DiagramsService) {
      * @return ResponseEntity with the appropriate status and/or the existing diagram.
      */
     @GetMapping(PathTemplate.GET_DIAGRAMS)
+    @RequiresAuthentication
     fun getDiagrams(
         @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
     ): ResponseEntity<SirenEntity<GetDiagramsOutputModel>> {

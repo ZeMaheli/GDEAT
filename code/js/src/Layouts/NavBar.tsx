@@ -48,7 +48,7 @@ export default function NavBar() {
     const filteredPages = pages.filter(page => page.href !== location.pathname);
 
     return (
-        <AppBar position="static" sx={{ backgroundColor: '#343541' }}>
+        <AppBar position="static" sx={{backgroundColor: '#f5f5f5'}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <IconButton
@@ -58,8 +58,9 @@ export default function NavBar() {
                         aria-haspopup="true"
                         onClick={handleOpenNavMenu}
                         color="inherit"
+                        sx={{color: '#333'}}
                     >
-                        <MenuIcon />
+                        <MenuIcon/>
                     </IconButton>
                     <Menu
                         id="menu-appbar"
@@ -77,8 +78,8 @@ export default function NavBar() {
                         onClose={handleCloseNavMenu}
                         sx={{
                             '.MuiPaper-root': {
-                                backgroundColor: '#343541',
-                                color: '#00A67E',
+                                backgroundColor: '#f5f5f5',
+                                color: '#555',
                             }
                         }}
                     >
@@ -94,7 +95,7 @@ export default function NavBar() {
                                             navigate(page.href);
                                         }
                                     }}
-                                    sx={{ color: '#00A67E' }}
+                                    sx={{color: '#555'}}
                                 >
                                     <Typography textAlign="center">{page.name}</Typography>
                                 </MenuItem>
@@ -112,7 +113,7 @@ export default function NavBar() {
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
-                            color: '#00A67E',
+                            color: '#555',
                             textDecoration: 'none',
                             cursor: 'pointer'
                         }}

@@ -14,11 +14,11 @@ object PathTemplate {
     const val REFRESH_TOKEN = "/users/refresh-token"
 
     // GRAPH
-    const val CREATE_DIAGRAM = "/graphs/create"
-    const val STORE_DIAGRAM = "/graphs/save"
-    const val GET_DIAGRAM = "/graphs/{name}"
-    const val GET_DIAGRAMS = "/graphs"
-    const val DELETE_DIAGRAMS = "/graphs/{name}/delete"
+    const val CREATE_DIAGRAM = "/diagrams/create"
+    const val STORE_DIAGRAM = "/diagrams/save"
+    const val GET_DIAGRAM = "/diagrams/{name}"
+    const val GET_DIAGRAMS = "/diagrams"
+    const val DELETE_DIAGRAMS = "/diagrams/{name}/delete"
 
     // URI's
     fun home() = URI(HOME)
