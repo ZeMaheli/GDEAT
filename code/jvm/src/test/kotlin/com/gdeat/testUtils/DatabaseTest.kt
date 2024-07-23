@@ -1,13 +1,11 @@
 package com.gdeat.testUtils
 
-import com.gdeat.testUtils.TestConfig
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.transaction.annotation.Transactional
-import pt.isel.daw.battleships.testUtils.runScript
 
 @SpringBootTest(classes = [TestConfig::class])
 @AutoConfigureTestEntityManager

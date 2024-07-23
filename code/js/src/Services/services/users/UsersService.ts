@@ -2,14 +2,14 @@ import {RegisterOutputModel} from "./models/register/RegisterOutputModel";
 import {LoginOutputModel} from "./models/login/LoginOutputModel";
 import {LogoutOutputModel} from "./models/logout/LogoutOutputModel";
 import {RefreshTokenOutput} from "./models/refreshToken/RefreshTokenOutputModel";
-import {post} from "../../custom/useFetch";
+import {post} from "../../utils/fetchSiren";
+import {LOGIN, LOGOUT, REFRESH_TOKEN, REGISTER} from "../../navigation/URIS";
 
 export namespace UsersService {
 
     /**
      * Registers the user with the given email, username and password.
      *
-     * @param registerLink the link to the register endpoint
      * @param email the email of the user
      * @param username the username of the user
      * @param password the password of the user
@@ -18,19 +18,17 @@ export namespace UsersService {
      * @return the API result of the register request
      */
     export async function register(
-        registerLink: string,
         email: string,
         username: string,
         password: string,
         signal?: AbortSignal
     ): Promise<RegisterOutputModel> {
-        return await post(registerLink, JSON.stringify({email, username, password}), signal)
+        return await post(REGISTER, JSON.stringify({username, email, password}), signal)
     }
 
     /**
      * Logs in the user with the given username and password.
      *
-     * @param loginLink the link to the login endpoint
      * @param username the username of the user
      * @param password the password of the user
      * @param signal the signal to cancel the request
@@ -38,12 +36,11 @@ export namespace UsersService {
      * @return the API result of the login request
      */
     export async function login(
-        loginLink: string,
         username: string,
         password: string,
         signal?: AbortSignal
     ): Promise<LoginOutputModel> {
-        return await post(loginLink, JSON.stringify({username, password}), signal)
+        return await post(LOGIN, JSON.stringify({username, password}), signal)
     }
 
     /**
@@ -58,7 +55,7 @@ export namespace UsersService {
         logoutLink: string,
         signal?: AbortSignal
     ): Promise<LogoutOutputModel> {
-        return await post(logoutLink, undefined, signal)
+        return await post(LOGOUT, undefined, signal)
     }
 
     /**
@@ -73,7 +70,7 @@ export namespace UsersService {
         refreshTokenLink: string,
         signal?: AbortSignal
     ): Promise<RefreshTokenOutput> {
-        return post(refreshTokenLink, undefined, signal)
+        return post(REFRESH_TOKEN, undefined, signal)
     }
 
 }

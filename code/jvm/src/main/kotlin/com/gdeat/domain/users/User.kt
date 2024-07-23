@@ -27,16 +27,13 @@ class User{
     ){
 
         if(username.length !in MIN_USERNAME_LENGTH .. MAX_USERNAME_LENGTH){
-            println("$username is not a valid username")
             throw InvalidUserException("Invalid username length. Please provide username length between $MIN_USERNAME_LENGTH..$MAX_USERNAME_LENGTH.")
         }
 
         if (passwordHash.length > PASSWORD_HASH_LENGTH){
-            println("invalid password hash. Password hash length is ${passwordHash.length}")
             throw InvalidUserException("Invalid password hash. Must have a length of $PASSWORD_HASH_LENGTH")
         }
         if (email.length > MAX_EMAIL_LENGTH){
-            println("invalid email length. Email length is ${email.length}")
             throw InvalidUserException("invalid email length. Email length is ${email.length} and max length is $MAX_EMAIL_LENGTH")
         }
 

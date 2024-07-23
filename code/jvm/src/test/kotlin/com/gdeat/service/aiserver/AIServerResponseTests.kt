@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test
 class AIServerResponseTests {
     @Test
     fun `AIServerResponse creation is successful`() {
-        val request = AIServerResponse(
-            DiagramCreateOutputDTOTests.defaultDiagramCreateOutputDTO
+        AIServerResponse(
+            DiagramCreateOutputDTOTests.defaultDiagramCreateOutputDTO.toString()
         )
     }
 }

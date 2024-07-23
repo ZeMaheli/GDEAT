@@ -1,21 +1,20 @@
 package com.gdeat.service
 
-import org.mockito.Mockito
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.junit4.SpringRunner
+import com.gdeat.config.SecurityConfig
 import com.gdeat.domain.users.UserTests.Companion.defaultUser
 import com.gdeat.repository.tokens.RevokedAccessTokenRepository
 import com.gdeat.repository.users.UsersRepository
 import com.gdeat.security.JWTProvider
-import com.gdeat.security.SecurityConfig
 import com.gdeat.service.exceptions.AuthenticationException
 import com.gdeat.service.exceptions.NotFoundException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.mockito.Mockito
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 
 @SpringBootTest
 @AutoConfigureMockMvc

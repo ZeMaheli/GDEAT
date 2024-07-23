@@ -39,6 +39,6 @@ class RefreshToken {
     }
 
     companion object {
-        const val MAX_TOKEN_HASH_LENGTH = 512
+        const val MAX_TOKEN_HASH_LENGTH = 60
     }
 }

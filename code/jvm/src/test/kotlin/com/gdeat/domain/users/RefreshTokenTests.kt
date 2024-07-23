@@ -1,15 +1,15 @@
 package com.gdeat.domain.users
 
 import com.gdeat.domain.exceptions.InvalidTokenException
+import com.gdeat.domain.users.UserTests.Companion.defaultUser
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.sql.Timestamp
 import java.time.Instant
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.jvm.isAccessible
-import com.gdeat.domain.users.UserTests.Companion.defaultUser
 
 class RefreshTokenTests {
 
@@ -26,10 +26,10 @@ class RefreshTokenTests {
 
         val refreshTokenId = RefreshToken::class.declaredMemberProperties
             .first { it.name == "id" }.also { it.isAccessible = true }
-            .call(refreshToken) as Int?
+            .call(refreshToken) as Long?
 
-        assertNull(refreshTokenId)
-        assertEquals(defaultUser, refreshToken.user)
+        assertNotNull(refreshTokenId)
+        assertEquals(defaultUser.username, refreshToken.user.username)
         assertEquals(tokenHash, refreshToken.tokenHash)
         assertEquals(expirationDate, refreshToken.expirationDate)
     }
@@ -45,11 +45,12 @@ class RefreshTokenTests {
         }
     }
 
-    companion object{
-        val defaultRefreshToken get() =  RefreshToken(
-            user = defaultUser,
-            tokenHash = "a",
-            expirationDate = Timestamp.from(Instant.now())
-        )
+    companion object {
+        val defaultRefreshToken
+            get() = RefreshToken(
+                user = defaultUser,
+                tokenHash = "a",
+                expirationDate = Timestamp.from(Instant.now())
+            )
     }
 }

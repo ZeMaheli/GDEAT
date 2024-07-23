@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 class AIServerRequestTests {
     @Test
     fun `AIServerRequest creation is successful`() {
-        val request = AIServerRequest(
+        AIServerRequest(
             "criar um modelo entidade associação para uma empresa que tem os atributos local, nome,email," +
                 "apoio ao cliente e com uma relação com outra entidade cliente que tem os atributos " +
                 "id,nome,idade,telefone"

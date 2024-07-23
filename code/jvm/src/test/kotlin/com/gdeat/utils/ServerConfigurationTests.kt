@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.utils
+package com.gdeat.utils
 
 import com.gdeat.config.ServerConfiguration
 import org.junit.jupiter.api.Assertions.assertEquals

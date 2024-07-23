@@ -7,11 +7,13 @@ object Rels {
 
     const val HOME = "home"
 
+    const val USER = "user"
     const val REGISTER = "register"
     const val LOGIN = "login"
     const val LOGOUT = "logout"
     const val REFRESH_TOKEN = "refresh-token"
 
+    const val DIAGRAM = "diagram"
     const val CREATE_DIAGRAM = "create-diagram"
     const val GET_DIAGRAM = "get-diagram"
     const val STORE_DIAGRAM = "store-diagram"

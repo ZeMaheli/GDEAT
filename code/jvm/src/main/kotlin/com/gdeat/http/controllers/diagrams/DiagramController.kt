@@ -4,9 +4,11 @@ import com.gdeat.http.controllers.diagrams.models.createDiagram.DiagramCreateInp
 import com.gdeat.http.controllers.diagrams.models.createDiagram.DiagramCreateOutputModel
 import com.gdeat.http.controllers.diagrams.models.deleteDiagram.DeleteDiagramOutputModel
 import com.gdeat.http.controllers.diagrams.models.getDiagram.GetDiagramOutputModel
+import com.gdeat.http.controllers.diagrams.models.getDiagrams.GetDiagramName
 import com.gdeat.http.controllers.diagrams.models.getDiagrams.GetDiagramsOutputModel
 import com.gdeat.http.controllers.diagrams.models.storeDiagram.StoreDiagramInputModel
 import com.gdeat.http.pipeline.authentication.RequiresAuthentication
+import com.gdeat.http.utils.Links
 import com.gdeat.http.utils.PathTemplate
 import com.gdeat.http.utils.Rels
 import com.gdeat.security.JWTProvider.Companion.ACCESS_TOKEN_ATTRIBUTE
@@ -14,8 +16,9 @@ import com.gdeat.service.diagrams.DiagramsService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import sirenentity.siren.Link
+import sirenentity.siren.Action
 import sirenentity.siren.SirenEntity
+import sirenentity.siren.SubEntity
 
 @RestController
 class DiagramController(private val diagramServices: DiagramsService) {
@@ -36,7 +39,7 @@ class DiagramController(private val diagramServices: DiagramsService) {
             `class` = listOf(Rels.CREATE_DIAGRAM),
             properties = DiagramCreateOutputModel(graphInfoDTO),
             links = listOf(
-                Link(rel = listOf(Rels.CREATE_DIAGRAM), href = PathTemplate.diagramCreate())
+                Links.self(PathTemplate.diagramCreate())
             ),
         )
 
@@ -61,8 +64,8 @@ class DiagramController(private val diagramServices: DiagramsService) {
             `class` = listOf(Rels.STORE_DIAGRAM),
             properties = Unit,
             links = listOf(
-                Link(rel = listOf(Rels.STORE_DIAGRAM), href = PathTemplate.diagramsStore())
-            ),
+                Links.self(PathTemplate.diagramsStore())
+            )
         )
 
         return storeDiagramEntity.toResponse(HttpStatus.OK)
@@ -86,8 +89,14 @@ class DiagramController(private val diagramServices: DiagramsService) {
         val getDiagramEntity = SirenEntity(
             `class` = listOf(Rels.GET_DIAGRAM),
             properties = GetDiagramOutputModel(diagramInfo),
+            entities = listOf(
+                SubEntity.EmbeddedLink(
+                    rel = listOf(Rels.STORE_DIAGRAM),
+                    href = PathTemplate.diagramsStore(),
+                )
+            ),
             links = listOf(
-                Link(rel = listOf(Rels.GET_DIAGRAM), href = PathTemplate.diagramGet(name))
+                Links.self(PathTemplate.diagramsGet())
             ),
         )
 
@@ -101,11 +110,11 @@ class DiagramController(private val diagramServices: DiagramsService) {
      * @param name The diagram name obtained from the path variable.
      * @return ResponseEntity with the appropriate status and/or the deleted diagram.
      */
-    @DeleteMapping(PathTemplate.DELETE_DIAGRAMS)
+    @PostMapping(PathTemplate.DELETE_DIAGRAMS)
     @RequiresAuthentication
     fun deleteDiagram(
         @RequestAttribute(ACCESS_TOKEN_ATTRIBUTE) token: String,
-        @PathVariable name: String
+        @RequestBody name: String
     ): ResponseEntity<SirenEntity<DeleteDiagramOutputModel>> {
         val deletedDiagramInfo = diagramServices.deleteDiagram(token, name)
 
@@ -113,7 +122,7 @@ class DiagramController(private val diagramServices: DiagramsService) {
             `class` = listOf(Rels.DELETE_DIAGRAM),
             properties = DeleteDiagramOutputModel(deletedDiagramInfo),
             links = listOf(
-                Link(rel = listOf(Rels.DELETE_DIAGRAM), href = PathTemplate.diagramDelete(name))
+                Links.self(PathTemplate.diagramDelete())
             ),
         )
 
@@ -123,7 +132,7 @@ class DiagramController(private val diagramServices: DiagramsService) {
     /**
      * Handles the request of all user diagrams information.
      * @param token the access token of the user
-     * @return ResponseEntity with the appropriate status and/or the existing diagram.
+     * @return ResponseEntity with the appropriate status and/or the existing diagrams.
      */
     @GetMapping(PathTemplate.GET_DIAGRAMS)
     @RequiresAuthentication
@@ -134,8 +143,31 @@ class DiagramController(private val diagramServices: DiagramsService) {
         val getDiagramEntity = SirenEntity(
             `class` = listOf(Rels.GET_DIAGRAMS),
             properties = GetDiagramsOutputModel(diagrams),
+            entities = diagrams.diagrams.map { diagramName ->
+                SubEntity.EmbeddedSubEntity(
+                    rel = listOf(Rels.DIAGRAM, "${Rels.DIAGRAM}-${diagramName}"),
+                    properties = GetDiagramName(diagramName),
+                    links = listOf(
+                        Links.self(PathTemplate.diagramGet(name = diagramName))
+                    ),
+                    actions = listOf(
+                        Action(
+                            name = Rels.GET_DIAGRAM,
+                            title = "Get Diagram",
+                            method = "GET",
+                            href = PathTemplate.diagramGet(name = diagramName)
+                        )
+                    ),
+                    entities = listOf(
+                        SubEntity.EmbeddedLink(
+                            rel = listOf(Rels.GET_DIAGRAM),
+                            href = PathTemplate.diagramGet(name = diagramName)
+                        )
+                    )
+                )
+            },
             links = listOf(
-                Link(rel = listOf(Rels.GET_DIAGRAMS), href = PathTemplate.diagramsGet())
+                Links.self(PathTemplate.diagramsGet())
             ),
         )
 

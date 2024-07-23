@@ -8,15 +8,16 @@ class GetDiagramsOutputModelTests {
     @Test
     fun `GetDiagramsOutputModel creation is successful`() {
         GetDiagramsOutputModel(
-            listOf("diagram1", "diagram2", "diagram3")
-
+            3
         )
     }
+
     @Test
     fun `GetDiagramsOutputModel creation with DiagramCreateOutputDTO is successful`() {
 
         val diagram = GetDiagramsOutputDTO(
-            listOf("diagram1", "diagram2", "diagram3")
+            listOf("diagram1", "diagram2", "diagram3"),
+            3
         )
         GetDiagramsOutputModel(diagram)
     }

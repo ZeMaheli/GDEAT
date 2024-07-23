@@ -41,23 +41,23 @@ class ParamsTests {
     }
     @Test
     fun `CREATE_DIAGRAM_PARAM is correct`() {
-        assertEquals("/graphs/create", CREATE_DIAGRAM)
+        assertEquals("/diagrams/create", CREATE_DIAGRAM)
     }
     @Test
     fun `STORE_DIAGRAM_PARAM is correct`() {
-        assertEquals("/graphs/save", STORE_DIAGRAM)
+        assertEquals("/diagrams/save", STORE_DIAGRAM)
     }
     @Test
     fun `GET_DIAGRAM_PARAM is correct`() {
-        assertEquals("/graphs/{name}", GET_DIAGRAM)
+        assertEquals("/diagrams/{name}", GET_DIAGRAM)
     }
     @Test
     fun `GET_DIAGRAMS_PARAM is correct`() {
-        assertEquals("/graphs", GET_DIAGRAMS)
+        assertEquals("/diagrams", GET_DIAGRAMS)
     }
     @Test
     fun `DELETE_DIAGRAMS_PARAM is correct`() {
-        assertEquals("/graphs/{name}/delete", DELETE_DIAGRAMS)
+        assertEquals("/diagrams/delete", DELETE_DIAGRAMS)
     }
 
 
@@ -83,7 +83,7 @@ class ParamsTests {
     }
     @Test
     fun `DELETE_DIAGRAMS_URI is correct`() {
-        assertEquals(DELETE_DIAGRAMS.replace("{name}",name), PathTemplate.diagramDelete(name).path)
+        assertEquals(DELETE_DIAGRAMS, PathTemplate.diagramDelete().path)
     }
     @Test
     fun `GET_DIAGRAM_URI is correct`() {

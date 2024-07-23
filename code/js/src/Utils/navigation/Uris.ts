@@ -7,5 +7,6 @@ export namespace Uris{
     export const LOGIN = "/login"
     export const REGISTER = "/register"
 
-    export const GRAPHS = "/graphs"
+    export const DIAGRAMS = "/diagrams"
+    export const DIAGRAM = "/diagrams/:name"
 }

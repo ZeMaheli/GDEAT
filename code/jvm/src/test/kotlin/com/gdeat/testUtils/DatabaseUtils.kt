@@ -1,4 +1,4 @@
-package pt.isel.daw.battleships.testUtils
+package com.gdeat.testUtils
 
 import org.hibernate.Session
 import org.hibernate.query.NativeQuery

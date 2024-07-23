@@ -118,7 +118,7 @@ class DiagramsServiceImpl(
     override fun getDiagrams(token: String): GetDiagramsOutputDTO {
         val user = authenticateUser(token)
         val diagrams = diagramsRepository.findAllByUser(user).map { diagram -> diagram.name }
-        return GetDiagramsOutputDTO(diagrams)
+        return GetDiagramsOutputDTO(diagrams, diagrams.size)
     }
 
     /**

@@ -6,6 +6,7 @@ import com.gdeat.http.controllers.users.models.refreshToken.RefreshTokenOutputMo
 import com.gdeat.http.controllers.users.models.register.RegisterInputModel
 import com.gdeat.http.controllers.users.models.register.RegisterOutputModel
 import com.gdeat.http.pipeline.authentication.RequiresAuthentication
+import com.gdeat.http.utils.Links
 import com.gdeat.http.utils.PathTemplate
 import com.gdeat.http.utils.Rels
 import com.gdeat.security.JWTProvider
@@ -53,7 +54,7 @@ class UsersController(private val usersServices: UsersService) {
             `class` = listOf(Rels.REGISTER),
             properties = RegisterOutputModel(userRegistryDTO),
             links = listOf(
-                Link(rel = listOf(Rels.HOME), href = PathTemplate.home())
+                Links.home
             ),
         )
 
@@ -80,7 +81,7 @@ class UsersController(private val usersServices: UsersService) {
             `class` = listOf(Rels.LOGIN),
             properties = LoginOutputModel(userLogInDTO),
             links = listOf(
-                Link(rel = listOf(Rels.HOME), href = PathTemplate.home())
+                Links.home
             ),
         )
 
@@ -109,7 +110,7 @@ class UsersController(private val usersServices: UsersService) {
             `class` = listOf(Rels.LOGOUT),
             properties = Unit,
             links = listOf(
-                Link(rel = listOf(Rels.HOME), href = PathTemplate.home())
+                Links.home
             ),
         )
 
@@ -138,7 +139,7 @@ class UsersController(private val usersServices: UsersService) {
             `class` = listOf(Rels.LOGIN),
             properties = RefreshTokenOutputModel(refreshTokenDTO),
             links = listOf(
-                Link(rel = listOf(Rels.HOME), href = PathTemplate.home())
+                Links.home
             ),
         )
 

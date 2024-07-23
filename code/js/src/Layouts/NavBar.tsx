@@ -28,9 +28,6 @@ export default function NavBar() {
             navigate('/');
             return;
         }
-        //
-        //
-        //
         sessionManager.clearSession();
         navigate('/');
     };

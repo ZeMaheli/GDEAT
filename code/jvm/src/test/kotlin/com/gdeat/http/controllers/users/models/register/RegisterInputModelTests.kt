@@ -1,6 +1,5 @@
-package pt.isel.daw.battleships.http.controllers.users.models.register
+package com.gdeat.http.controllers.users.models.register
 
-import com.gdeat.http.controllers.users.models.register.RegisterInputModel
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
